@@ -1,0 +1,3757 @@
+================================================================================
+                    SISTEMA DE GESTIÓN APOLO GYM - DOCUMENTACIÓN COMPLETA
+================================================================================
+
+ESTRUCTURA DEL PROYECTO:
+========================
+
+apolo-gym/
+├── README.md
+├── index.html
+├── package.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.node.json
+├── vite.config.ts
+├── tailwind.config.js
+├── postcss.config.js
+├── eslint.config.js
+├── src/
+│   ├── main.tsx
+│   ├── App.tsx
+│   ├── index.css
+│   ├── vite-env.d.ts
+│   ├── components/
+│   │   └── Layout.tsx
+│   ├── pages/
+│   │   ├── Asistencias.tsx
+│   │   ├── Socios.tsx
+│   │   ├── BuscarCarnet.tsx
+│   │   ├── Caja.tsx
+│   │   └── Backups.tsx
+│   ├── hooks/
+│   │   └── useGymData.ts
+│   ├── types/
+│   │   ├── index.ts
+│   │   └── global.d.ts
+│   └── utils/
+│       └── localStorage.ts
+├── electron/
+│   ├── main.js
+│   ├── preload.js
+│   └── assets/
+│       └── .gitkeep
+└── public/
+    └── logo-apolo.jpg
+
+================================================================================
+                                ARCHIVOS COMPLETOS
+================================================================================
+
+================================================================================
+README.md
+================================================================================
+# APOLO GYM - Sistema de Gestión
+
+Un sistema completo de gestión para gimnasios desarrollado con React, TypeScript y Electron. Permite administrar socios, carnets, caja, turnos de trabajo y asistencias de manera eficiente y profesional.
+
+🌐 **Demo en línea**: [https://sistema-de-gesti-n-a-qpgr.bolt.host](https://sistema-de-gesti-n-a-qpgr.bolt.host)
+
+## 🏋️ Características Principales
+
+### 📅 Control de Asistencias
+- **Registro rápido** por carnet o nombre del socio
+- **Sugerencias automáticas** mientras escribes
+- **Historial completo** con filtros por fecha y socio
+- **Reportes detallados** por período y socio
+- **Exportación** en formatos JSON y CSV
+- **Importación** de datos de asistencias
+
+### 📋 Gestión de Socios
+- **Registro de nuevos socios** con datos completos
+- **Campo de teléfono** para contacto adicional
+- **Generación automática de carnets** con numeración secuencial (formato: AÑO-XXX)
+- **Control de estados** (vigente/vencido) basado en fecha de inicio
+- **Visualización tipo carnet** con diseño profesional
+- **Búsqueda rápida** por número de carnet
+- **Edición completa** de datos del socio
+- **Renovación de membresías** con un clic
+- **Eliminación segura** con confirmación por clave
+
+### 💰 Sistema de Caja
+- **Control de turnos** con usuario responsable y monto inicial
+- **Registro de ingresos** por carnets con forma de pago (efectivo/transferencia)
+- **Gestión de retiros** del dueño con numeración automática
+- **Control de gastos** con proveedor, motivo y remito
+- **Cálculo automático** del efectivo disponible en caja
+- **Cierre de turno** con cálculo de recaudación
+
+### 🔍 Búsqueda y Consultas
+- **Búsqueda por carnet** con visualización completa del socio
+- **Estados visuales** claros (vigente en verde, vencido en rojo)
+- **Información detallada** del socio y su estado de membresía
+
+### 💾 Sistema de Backups
+- **Exportación manual** de todos los datos en formato JSON
+- **Importación** de backups para restaurar datos
+- **Backups automáticos** programables por intervalo o hora específica
+- **Soporte para carpetas** de Google Drive u otras ubicaciones sincronizadas
+
+## 🛠️ Tecnologías Utilizadas
+
+- **Frontend**: React 18 + TypeScript
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Desktop**: Electron
+- **Build Tool**: Vite
+- **Linting**: ESLint
+
+## 🌐 Acceso Web
+
+La aplicación está disponible en línea en: **[https://sistema-de-gesti-n-a-qpgr.bolt.host](https://sistema-de-gesti-n-a-qpgr.bolt.host)**
+
+## 📦 Instalación
+
+### Prerrequisitos
+- Node.js 16 o superior
+- npm o yarn
+
+### Pasos de instalación
+
+1. **Clonar el repositorio**
+```bash
+git clone [URL_DEL_REPOSITORIO]
+cd apolo-gym
+```
+
+2. **Instalar dependencias**
+```bash
+npm install
+```
+
+3. **Ejecutar en modo desarrollo**
+```bash
+npm run dev
+```
+
+4. **Para ejecutar como aplicación de escritorio**
+```bash
+# Instalar dependencias de Electron (si no están instaladas)
+npm install electron electron-builder --save-dev
+
+# Ejecutar la aplicación de escritorio
+npm run electron:dev
+```
+
+## 🚀 Uso del Sistema
+
+### Acceso Web
+1. Visita [https://sistema-de-gesti-n-a-qpgr.bolt.host](https://sistema-de-gesti-n-a-qpgr.bolt.host)
+2. Los datos se guardan en el navegador (localStorage)
+3. Usa la función de backups para exportar/importar datos
+4. **Nota**: En la versión web, los backups automáticos requieren mantener la pestaña abierta
+
+### Inicio de Sesión
+1. Al abrir la aplicación, verás el panel principal con el menú lateral
+2. Navega entre las diferentes secciones usando el menú
+
+### Gestión de Socios
+1. **Crear nuevo socio**: Haz clic en "Nuevo Socio" y completa el formulario
+2. **Ver carnets**: Los carnets se muestran en formato visual con estado (vigente/vencido)
+3. **Ver detalles**: Haz clic en cualquier carnet para ver información completa
+
+### Control de Asistencias
+1. **Marcar asistencia**: Ingresa el carnet (ej: 25-001) o nombre del socio
+2. **Ver sugerencias**: El sistema muestra coincidencias mientras escribes
+3. **Consultar reportes**: Selecciona un rango de fechas para ver estadísticas
+
+### Sistema de Caja
+1. **Iniciar turno**: Antes de cualquier operación, inicia un turno con tu nombre y monto inicial
+2. **Registrar ingresos**: Ingresa el número de carnet y monto del pago
+3. **Registrar retiros**: Anota retiros del dueño con descripción opcional
+4. **Registrar gastos**: Documenta gastos con proveedor, motivo y remito
+5. **Cerrar turno**: Al finalizar, cierra el turno indicando el monto final
+
+### Sistema de Backups
+1. **Exportar**: Descarga todos los datos en formato JSON
+2. **Importar**: Restaura datos desde un archivo de backup
+3. **Programar**: Configura backups automáticos (requiere elegir carpeta destino)
+
+### Búsqueda de Carnets
+1. Ingresa el número de carnet (formato: 25-001)
+2. El sistema mostrará toda la información del socio
+3. El estado se indica visualmente (verde=vigente, rojo=vencido)
+
+## 📁 Estructura del Proyecto
+
+```
+apolo-gym/
+├── src/
+│   ├── components/          # Componentes reutilizables
+│   │   └── Layout.tsx       # Layout principal con navegación
+│   ├── pages/               # Páginas principales
+│   │   ├── Asistencias.tsx  # Control de asistencias
+│   │   ├── Socios.tsx       # Gestión de socios
+│   │   ├── BuscarCarnet.tsx # Búsqueda de carnets
+│   │   ├── Backups.tsx      # Sistema de backups
+│   │   └── Caja.tsx         # Sistema de caja
+│   ├── hooks/               # Custom hooks
+│   │   └── useGymData.ts    # Hook para manejo de datos
+│   ├── types/               # Definiciones de tipos
+│   │   ├── index.ts         # Tipos principales
+│   │   └── global.d.ts      # Tipos globales
+│   ├── utils/               # Utilidades
+│   │   └── localStorage.ts  # Manejo de datos locales
+│   ├── App.tsx              # Componente principal
+│   └── main.tsx             # Punto de entrada
+├── electron/                # Configuración de Electron
+│   ├── main.js              # Proceso principal
+│   ├── preload.js           # Script de preload
+│   └── assets/              # Recursos de la aplicación
+└── public/                  # Archivos públicos
+```
+
+## 💾 Almacenamiento de Datos
+
+### En Aplicación Web
+- Los datos se guardan en localStorage del navegador
+- Usa la función de backups para exportar/importar datos entre dispositivos
+
+### En Aplicación de Escritorio (Electron)
+- Los datos se guardan en: `C:\Users\[USUARIO]\OneDrive\Escritorio\apolo\apolo-gym-data.json`
+- Respaldo automático en cada operación
+- Persistencia garantizada entre sesiones
+
+## 🔧 Configuración
+
+### Personalización de Rutas
+Para cambiar la ruta de almacenamiento en Electron, modifica la variable `DATA_FOLDER` en `electron/main.js`:
+
+```javascript
+const DATA_FOLDER = 'tu/nueva/ruta/aqui';
+```
+
+### Configuración de Montos
+Los montos por defecto se pueden modificar en los componentes correspondientes:
+- Monto de carnet: `30000` (en formularios de socio e ingreso)
+
+### Configuración de Backups
+- **Web**: Los backups se descargan o guardan en carpeta elegida (si el navegador soporta File System Access API)
+- **Escritorio**: Los backups se guardan en la carpeta seleccionada (ideal: Google Drive para sincronización)
+
+## 🎨 Características de Diseño
+
+- **Interfaz moderna** con Tailwind CSS
+- **Diseño responsivo** que se adapta a diferentes tamaños de pantalla
+- **Iconografía consistente** con Lucide React
+- **Estados visuales claros** con códigos de color
+- **Transiciones suaves** para mejor experiencia de usuario
+
+## 📊 Funcionalidades de Negocio
+
+### Control de Vencimientos
+- Los carnets vencen automáticamente después de 30 días
+- El estado se actualiza dinámicamente al cargar los datos
+- Visualización clara del estado en toda la aplicación
+
+### Numeración Automática
+- **Carnets**: Formato AÑO-XXX (ej: 25-001, 25-002...)
+- **Retiros**: Numeración secuencial simple (001, 002, 003...)
+
+### Control de Asistencias
+- **Registro por turno**: Las asistencias se asocian al turno y usuario activo
+- **Búsqueda inteligente**: Encuentra socios por carnet exacto o nombre parcial
+- **Reportes detallados**: Estadísticas por socio y período
+### Cálculos Automáticos
+- **Efectivo en caja**: Monto inicial + ingresos efectivo - retiros - gastos
+- **Recaudación de turno**: Monto final - monto inicial
+
+## 🔒 Seguridad
+
+- **Validación de datos** en todos los formularios
+- **Persistencia segura** de datos en archivo local
+- **No conexión a internet** requerida para funcionamiento básico
+
+## 🌍 Compatibilidad
+
+- **Navegadores**: Chrome, Firefox, Safari, Edge (versiones modernas)
+- **Dispositivos**: Desktop, tablet, móvil (diseño responsivo)
+- **Sistemas**: Windows, macOS, Linux (versión Electron)
+
+## 🐛 Solución de Problemas
+
+### La aplicación no guarda datos
+- Verifica que la carpeta de destino tenga permisos de escritura
+- En Windows, asegúrate de que OneDrive esté sincronizado
+
+### Error al iniciar la aplicación
+- Verifica que Node.js esté instalado correctamente
+- Ejecuta `npm install` para reinstalar dependencias
+
+### Los carnets no se muestran correctamente
+- Verifica que los datos estén en el formato correcto
+- Revisa la consola del navegador para errores específicos
+
+### Problemas con backups automáticos
+- **Web**: Asegúrate de mantener la pestaña abierta y dar permisos de carpeta
+- **Escritorio**: Verifica que la carpeta destino tenga permisos de escritura
+
+### Los datos no se sincronizan entre dispositivos
+- Usa la función de exportar/importar backups
+- En escritorio, configura la carpeta de backups en Google Drive
+
+## 📝 Licencia
+
+Este proyecto es de uso privado para APOLO GYM.
+
+## 👥 Soporte
+
+Para soporte técnico o consultas sobre el sistema, contacta al desarrollador.
+
+## 🔗 Enlaces Útiles
+
+- **Aplicación Web**: [https://sistema-de-gesti-n-a-qpgr.bolt.host](https://sistema-de-gesti-n-a-qpgr.bolt.host)
+- **Repositorio**: [Contactar al desarrollador para acceso]
+
+---
+
+**APOLO GYM** - Sistema de Gestión Profesional 💪
+
+================================================================================
+index.html
+================================================================================
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Gestión APOLO GYM</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+================================================================================
+package.json
+================================================================================
+{
+  "name": "vite-react-typescript-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2"
+  },
+  "build": {
+    "appId": "com.apolo-gym.desktop",
+    "productName": "APOLO GYM",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "electron/assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
+
+================================================================================
+tsconfig.json
+================================================================================
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+================================================================================
+tsconfig.app.json
+================================================================================
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}
+
+================================================================================
+tsconfig.node.json
+================================================================================
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["vite.config.ts"]
+}
+
+================================================================================
+vite.config.ts
+================================================================================
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  base: './',
+  optimizeDeps: {
+    exclude: ['lucide-react'],
+  },
+});
+
+================================================================================
+tailwind.config.js
+================================================================================
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+
+================================================================================
+postcss.config.js
+================================================================================
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+================================================================================
+eslint.config.js
+================================================================================
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  }
+);
+
+================================================================================
+src/main.tsx
+================================================================================
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.tsx';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
+
+================================================================================
+src/App.tsx
+================================================================================
+// src/App.tsx
+import React, { useMemo, useState } from 'react';
+import { Loader, Lock, Play } from 'lucide-react';
+import { Layout } from './components/Layout';
+import { Socios } from './pages/Socios';
+import { BuscarCarnet } from './pages/BuscarCarnet';
+import Caja from './pages/Caja';
+import { useGymData } from './hooks/useGymData';
+import Asistencias from './pages/Asistencias';
+import Backups from './pages/Backups';
+
+function App() {
+  // Página por defecto: asistencias
+  const [currentPage, setCurrentPage] = useState('asistencias');
+
+  const {
+    data,
+    isLoading,
+    addSocio,
+    addIngreso,
+    addRetiro,
+    addGasto,
+    iniciarTurno,
+    cerrarTurno,
+    renovarMembresia,   // ← se usa en Socios
+    updateSocio,        // ← se usa en Socios
+    deleteSocio,        // ← se usa en Socios
+  } = useGymData();
+
+  // Turno abierto / bloqueo
+  const turnoAbierto = useMemo(() => data.turnos.find(t => !t.cerrado), [data.turnos]);
+  const locked = !turnoAbierto;
+
+  // Estado para iniciar turno desde la pantalla de bloqueo
+  const [usuarioTurno, setUsuarioTurno] = useState('');
+  const [montoInicialTurno, setMontoInicialTurno] = useState<number>(0);
+
+  const handleAbrirTurno = async () => {
+    if (!usuarioTurno.trim()) {
+      alert('Ingresá un usuario para iniciar el turno.');
+      return;
+    }
+    await iniciarTurno(usuarioTurno.trim(), Number(montoInicialTurno) || 0);
+    setUsuarioTurno('');
+    setMontoInicialTurno(0);
+    setCurrentPage('caja'); // llevo a caja tras abrir
+  };
+
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'asistencias':
+        return <Asistencias />;
+
+      case 'backups':
+        return <Backups />;
+
+      case 'socios':
+        return (
+          <Socios
+            socios={data.socios}
+            onAddSocio={addSocio}
+            contadorCarnet={data.contadores.carnet}
+            onUpdateSocio={updateSocio}
+            onDeleteSocio={deleteSocio}
+            onRenovar={renovarMembresia}
+          />
+        );
+
+      case 'buscar':
+        return (
+          <BuscarCarnet
+            socios={data.socios}
+            onNavigateBack={() => setCurrentPage('socios')}
+            onUpdateSocio={updateSocio}
+            onDeleteSocio={deleteSocio}
+          />
+        );
+
+      case 'caja':
+        return (
+          <Caja
+            socios={data.socios}
+            retiros={data.retiros}
+            gastos={data.gastos}
+            ingresos={data.ingresos}
+            turnos={data.turnos}
+            contadorRetiro={data.contadores.retiro}
+            onAddIngreso={addIngreso}
+            onAddRetiro={addRetiro}
+            onAddGasto={addGasto}
+            onIniciarTurno={iniciarTurno}
+            onCerrarTurno={cerrarTurno}
+          />
+        );
+
+      default:
+        // fallback a Socios
+        return (
+          <Socios
+            socios={data.socios}
+            onAddSocio={addSocio}
+            contadorCarnet={data.contadores.carnet}
+            onUpdateSocio={updateSocio}
+            onDeleteSocio={deleteSocio}
+            onRenovar={renovarMembresia}
+          />
+        );
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">APOLO GYM</h2>
+          <p className="text-gray-600">Cargando sistema...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Layout currentPage={currentPage} onNavigate={setCurrentPage} locked={locked}>
+      {locked ? (
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="w-full max-w-md bg-white border rounded-2xl shadow-md p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Lock className="w-6 h-6 text-red-600" />
+              <h2 className="text-xl font-semibold text-gray-800">Turno cerrado</h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              Para operar el sistema necesitás iniciar un turno.
+            </p>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Usuario</label>
+                <input
+                  value={usuarioTurno}
+                  onChange={e => setUsuarioTurno(e.target.value)}
+                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="Nombre del responsable"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Monto inicial</label>
+                <input
+                  type="number"
+                  value={montoInicialTurno}
+                  onChange={e => setMontoInicialTurno(Number(e.target.value))}
+                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder="0"
+                  min={0}
+                />
+              </div>
+              <button
+                onClick={handleAbrirTurno}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg px-4 py-2 flex items-center justify-center gap-2"
+              >
+                <Play className="w-4 h-4" />
+                Iniciar turno
+              </button>
+
+              <button
+                onClick={() => setCurrentPage('caja')}
+                className="w-full border rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-50"
+                title="Ir a Caja"
+              >
+                Ir a Caja
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        renderCurrentPage()
+      )}
+    </Layout>
+  );
+}
+
+export default App;
+
+================================================================================
+src/index.css
+================================================================================
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+================================================================================
+src/vite-env.d.ts
+================================================================================
+/// <reference types="vite/client" />
+
+================================================================================
+src/components/Layout.tsx
+================================================================================
+// src/components/Layout.tsx
+import React from 'react';
+import {
+  Users,
+  CreditCard,
+  Search,
+  CalendarCheck,
+  HardDrive,
+} from 'lucide-react';
+
+interface LayoutProps {
+  children: React.ReactNode;
+  currentPage: string;
+  onNavigate: (page: string) => void;
+  locked?: boolean;
+}
+
+export const Layout: React.FC<LayoutProps> = ({
+  children,
+  currentPage,
+  onNavigate,
+}) => {
+  // 👇 Asistencias va primero
+  const menuItems = [
+    { id: 'asistencias', label: 'Asistencias', icon: CalendarCheck },
+    { id: 'socios', label: 'Gestión de Socios', icon: Users },
+    { id: 'buscar', label: 'Buscar Carnet', icon: Search },
+    { id: 'caja', label: 'Caja', icon: CreditCard },
+    // Dejalo si ya tenés la página Backups, si no, podés quitarlo
+    { id: 'backups', label: 'Backups', icon: HardDrive },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header superior (con logo grande si lo querés también aquí) */}
+      <header className="bg-gradient-to-r from-blue-700 to-blue-900 text-white shadow-lg">
+        <div className="container mx-auto px-6 py-6 flex items-center gap-5">
+          <img
+            src="/logo-apolo.jpg"
+            alt="APOLO GYM"
+            className="h-24 w-auto rounded-md shadow-lg object-contain"
+          />
+          <h1 className="text-4xl md:text-5xl font-bold tracking-wide">
+            APOLO MEGAGYM
+          </h1>
+        </div>
+      </header>
+
+      <div className="flex">
+        {/* Sidebar */}
+        <nav className="w-72 bg-white shadow-lg min-h-screen">
+          {/* Logo arriba de la lista */}
+          <div className="p-6 border-b">
+            <img
+              src="/logo-apolo.jpg"
+              alt="Logo Apolo"
+              className="w-full max-w-[220px] mx-auto rounded-md shadow object-contain"
+            />
+          </div>
+
+          <div className="p-6">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              Panel de Control
+            </h2>
+            <ul className="space-y-2">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                const active = currentPage === item.id;
+                return (
+                  <li key={item.id}>
+                    <button
+                      onClick={() => onNavigate(item.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                        active
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'text-gray-700 hover:bg-gray-100 hover:text-blue-600'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      {item.label}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </nav>
+
+        {/* Main Content */}
+        <main className="flex-1 p-8">{children}</main>
+      </div>
+    </div>
+  );
+};
+
+================================================================================
+src/pages/Asistencias.tsx
+================================================================================
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  addAsistenciaByCarnetOrNombre,
+  getAsistencias,
+  getAsistenciasReport,
+  exportAsistenciasJSONFile,
+  exportAsistenciasCSVFile,
+  importAsistenciasFromFile,
+  buscarSugerenciasSocios,
+} from '../utils/localStorage';
+import { Download, Upload, Search, FileText, User, Hash } from 'lucide-react';
+
+const hoyISO = new Date().toISOString().slice(0, 10);
+
+type Sug = { id: string; carnet: string; nombreCompleto: string; dni?: string };
+
+export default function Asistencias() {
+  const [input, setInput] = useState('');
+  const [msg, setMsg] = useState<string | null>(null);
+  const [from, setFrom] = useState(hoyISO);
+  const [to, setTo] = useState(hoyISO);
+  const [filtro, setFiltro] = useState('');
+  const [tick, setTick] = useState(0);
+
+  const [sugerencias, setSugerencias] = useState<Sug[]>([]);
+  const [openSug, setOpenSug] = useState(false);
+  const [activeIdx, setActiveIdx] = useState<number>(-1);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const sugBoxRef = useRef<HTMLDivElement>(null);
+
+  const asistencias = useMemo(() => getAsistencias(), [tick]);
+
+  // Asistencias del día actual
+  const asistenciasHoy = useMemo(() => {
+    const hoyInicio = `${hoyISO}T00:00:00.000Z`;
+    const hoyFin = `${hoyISO}T23:59:59.999Z`;
+    const inicioTime = new Date(hoyInicio).getTime();
+    const finTime = new Date(hoyFin).getTime();
+    
+    return asistencias.filter(a => {
+      const asistenciaTime = new Date(a.timestampISO).getTime();
+      return asistenciaTime >= inicioTime && asistenciaTime <= finTime;
+    }).sort((a, b) => new Date(b.timestampISO).getTime() - new Date(a.timestampISO).getTime());
+  }, [asistencias]);
+
+  const visibles = useMemo(() => {
+    const q = filtro.trim().toLowerCase();
+    const base = asistencias;
+    if (!q) return base;
+    return base.filter(a =>
+      a.carnet.toLowerCase().includes(q) ||
+      a.nombreCompleto.toLowerCase().includes(q) ||
+      (a.byUsuario || '').toLowerCase().includes(q)
+    );
+  }, [asistencias, filtro]);
+
+  // Buscar sugerencias (debounce simple)
+  useEffect(() => {
+    let alive = true;
+    const h = setTimeout(async () => {
+      const q = input.trim();
+      if (!q) {
+        if (alive) { setSugerencias([]); setOpenSug(false); setActiveIdx(-1); }
+        return;
+      }
+      const list = await buscarSugerenciasSocios(q, 8);
+      if (!alive) return;
+      setSugerencias(list);
+      setOpenSug(list.length > 0);
+      setActiveIdx(list.length > 0 ? 0 : -1);
+    }, 140);
+    return () => { alive = false; clearTimeout(h); };
+  }, [input]);
+
+  // Cerrar dropdown al click fuera
+  useEffect(() => {
+    function onDocClick(ev: MouseEvent) {
+      if (!openSug) return;
+      const target = ev.target as Node;
+      if (sugBoxRef.current?.contains(target) || inputRef.current?.contains(target)) return;
+      setOpenSug(false);
+    }
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, [openSug]);
+
+  async function marcarValor(valor: string) {
+    if (!valor.trim()) return;
+    const rec = await addAsistenciaByCarnetOrNombre(valor);
+    if (!rec) {
+      setMsg('⚠️ No se encontró socio por carnet, nombre o DNI.');
+    } else {
+      setMsg(`✅ Asistencia: ${rec.carnet} — ${rec.nombreCompleto}`);
+      setInput('');
+      setSugerencias([]);
+      setOpenSug(false);
+      setActiveIdx(-1);
+      setTick(x => x + 1);
+    }
+  }
+
+  async function marcar() {
+    if (!input.trim()) return;
+    await marcarValor(input);
+  }
+
+  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!openSug || sugerencias.length === 0) {
+      if (e.key === 'Enter') marcar();
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIdx((i) => (i + 1) % sugerencias.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIdx((i) => (i - 1 + sugerencias.length) % sugerencias.length);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const sug = sugerencias[activeIdx >= 0 ? activeIdx : 0];
+      if (sug) marcarValor(sug.carnet || sug.nombreCompleto || sug.dni || '');
+    } else if (e.key === 'Escape') {
+      setOpenSug(false);
+    }
+  }
+
+  function exportarRangoJSON() {
+    const fromISO = `${from}T00:00:00.000Z`;
+    const toISO = `${to}T23:59:59.999Z`;
+    exportAsistenciasJSONFile(fromISO, toISO);
+  }
+
+  function exportarRangoCSV() {
+    const fromISO = `${from}T00:00:00.000Z`;
+    const toISO = `${to}T23:59:59.999Z`;
+    exportAsistenciasCSVFile(fromISO, toISO);
+  }
+
+  async function importarJSON(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const r = await importAsistenciasFromFile(file);
+      setMsg(`📥 Importadas: ${r.imported} — Omitidas: ${r.skipped}`);
+      setTick(x => x + 1);
+    } catch (err: any) {
+      setMsg(`❌ Error importando: ${err?.message || 'desconocido'}`);
+    } finally {
+      e.target.value = '';
+    }
+  }
+
+  function verReporte() {
+    const rep = getAsistenciasReport(`${from}T00:00:00.000Z`, `${to}T23:59:59.999Z`);
+    const lineas = [
+      `REPORTE DE ASISTENCIAS`,
+      `Rango: ${from} a ${to}`,
+      `Total: ${rep.total}`,
+      `---`,
+      ...rep.porSocio
+        .sort((a, b) => b.asistencias - a.asistencias)
+        .map(r => `${r.carnet} - ${r.nombreCompleto}: ${r.asistencias}`)
+    ];
+    alert(lineas.join('\n'));
+  }
+
+  return (
+    <div className="p-4 space-y-4">
+      <h1 className="text-xl font-semibold">Asistencias</h1>
+
+      <div className="grid gap-3 md:grid-cols-[1fr_auto_auto]">
+        {/* Buscador con autocompletado */}
+        <div className="relative">
+          <div className="flex items-center gap-2">
+            <Search className="w-5 h-5" />
+            <input
+              ref={inputRef}
+              autoFocus
+              placeholder="Carnet (25-001), nombre o DNI..."
+              className="border rounded px-3 py-2 w-full"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={onKeyDown}
+            />
+            <button onClick={marcar} className="px-3 py-2 rounded bg-blue-600 text-white">
+              Marcar
+            </button>
+          </div>
+
+          {/* Dropdown sugerencias */}
+          {openSug && sugerencias.length > 0 && (
+            <div
+              ref={sugBoxRef}
+              className="absolute z-20 mt-1 w-full bg-white border rounded shadow-lg max-h-64 overflow-auto"
+            >
+              {sugerencias.map((s, i) => {
+                const active = i === activeIdx;
+                return (
+                  <div
+                    key={s.id}
+                    className={`px-3 py-2 cursor-pointer flex items-center justify-between ${
+                      active ? 'bg-blue-600 text-white' : 'hover:bg-gray-50'
+                    }`}
+                    // Usar onMouseDown para evitar que el blur del input cancele el click
+                    onMouseDown={(ev) => {
+                      ev.preventDefault();
+                      marcarValor(s.carnet || s.nombreCompleto || s.dni || '');
+                    }}
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <Hash className="w-4 h-4 opacity-70" />
+                      <span className="font-mono">{s.carnet}</span>
+                      <span className="opacity-60">—</span>
+                      <User className="w-4 h-4 opacity-70" />
+                      <span className="truncate">{s.nombreCompleto}</span>
+                    </div>
+                    {s.dni ? <span className="text-xs opacity-70 ml-2">DNI: {s.dni}</span> : null}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <label className="flex items-center gap-2">
+          Desde:
+          <input type="date" value={from} onChange={e => setFrom(e.target.value)} className="border rounded px-2 py-1" />
+        </label>
+        <label className="flex items-center gap-2">
+          Hasta:
+          <input type="date" value={to} onChange={e => setTo(e.target.value)} className="border rounded px-2 py-1" />
+        </label>
+      </div>
+
+      {msg && <div className="text-sm text-gray-800">{msg}</div>}
+
+      {/* Asistencias del día actual */}
+      <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-lg p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-green-800 flex items-center gap-2">
+            <User className="w-5 h-5" />
+            Asistencias de Hoy ({new Date().toLocaleDateString()})
+          </h2>
+          <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+            {asistenciasHoy.length} registros
+          </span>
+        </div>
+        
+        {asistenciasHoy.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <User className="w-12 h-12 mx-auto mb-2 opacity-50" />
+            <p>No hay asistencias registradas hoy</p>
+          </div>
+        ) : (
+          <div className="grid gap-2 max-h-64 overflow-y-auto">
+            {asistenciasHoy.map(a => (
+              <div key={a.id} className="bg-white border rounded-lg p-3 flex items-center justify-between shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="bg-blue-100 p-2 rounded-full">
+                    <Hash className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-800">{a.nombreCompleto}</div>
+                    <div className="text-sm text-gray-600">Carnet: {a.carnet}</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-medium text-gray-800">
+                    {new Date(a.timestampISO).toLocaleTimeString()}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {a.byUsuario || 'Sistema'}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <button onClick={verReporte} className="px-3 py-2 border rounded flex items-center gap-2">
+          <FileText className="w-4 h-4" /> Ver reporte
+        </button>
+        <button onClick={exportarRangoJSON} className="px-3 py-2 border rounded flex items-center gap-2">
+          <Download className="w-4 h-4" /> Exportar rango (JSON)
+        </button>
+        <button onClick={exportarRangoCSV} className="px-3 py-2 border rounded flex items-center gap-2">
+          <Download className="w-4 h-4" /> Exportar rango (CSV)
+        </button>
+        <label className="px-3 py-2 border rounded flex items-center gap-2 cursor-pointer">
+          <Upload className="w-4 h-4" /> Importar asistencias (JSON)
+          <input type="file" accept="application/json" className="hidden" onChange={importarJSON} />
+        </label>
+        <div className="ml-auto flex items-center gap-2">
+          <input
+            placeholder="Filtrar historial por carnet/nombre/operador..."
+            className="border rounded px-3 py-2"
+            value={filtro}
+            onChange={e => setFiltro(e.target.value)}
+          />
+          <span className="text-xs text-gray-500">Mostrando {visibles.length} / {asistencias.length}</span>
+        </div>
+      </div>
+
+      <div className="bg-white border rounded-lg shadow-sm">
+        <div className="p-4 border-b bg-gray-50">
+          <h3 className="font-semibold text-gray-800">Historial Completo de Asistencias</h3>
+        </div>
+        <div className="overflow-auto">
+        <table className="min-w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="text-left p-2">Fecha/Hora</th>
+              <th className="text-left p-2">Carnet</th>
+              <th className="text-left p-2">Nombre</th>
+              <th className="text-left p-2">Operador</th>
+              <th className="text-left p-2">Turno</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visibles.length === 0 && (
+              <tr>
+                <td className="p-3 text-gray-500" colSpan={5}>Sin registros.</td>
+              </tr>
+            )}
+            {visibles.map(a => (
+              <tr key={a.id} className="border-t">
+                <td className="p-2">{new Date(a.timestampISO).toLocaleString()}</td>
+                <td className="p-2 font-mono">{a.carnet}</td>
+                <td className="p-2">{a.nombreCompleto}</td>
+                <td className="p-2">{a.byUsuario || '-'}</td>
+                <td className="p-2">{a.turnoId || '-'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+================================================================================
+src/pages/Socios.tsx
+================================================================================
+import React, { useMemo, useState } from 'react';
+import {
+  Plus, User, Calendar, DollarSign, Eye, Download, Search, Filter, Pencil, Trash2, RefreshCw
+} from 'lucide-react';
+import { Socio } from '../types';
+import {
+  generarNumeroCarnet,
+  exportCarnetsJSONFile,
+  exportCarnetsCSVFile,
+  calcularEstadoSocio,
+} from '../utils/localStorage';
+
+interface SociosProps {
+  socios: Socio[];
+  onAddSocio: (socio: Omit<Socio, 'id' | 'carnet' | 'estado'>) => void;
+  contadorCarnet: number;
+  onUpdateSocio: (socioId: string, patch: Partial<Omit<Socio, 'id' | 'carnet'>>) => void;
+  onDeleteSocio: (socioId: string) => void;
+  onRenovar: (socioId: string) => void;
+}
+
+type FiltroEstado = 'todos' | 'vigente' | 'vencido';
+
+export const Socios: React.FC<SociosProps> = ({
+  socios, onAddSocio, contadorCarnet, onUpdateSocio, onDeleteSocio, onRenovar
+}) => {
+  const [showForm, setShowForm] = useState(false);
+  const [filtroEstado, setFiltroEstado] = useState<FiltroEstado>('todos');
+  const [query, setQuery] = useState('');
+
+  const [formData, setFormData] = useState({
+    nombreCompleto: '',
+    dni: '',
+    telefono: '',
+    fechaInicio: new Date().toISOString().split('T')[0],
+    formaPago: 'efectivo' as 'efectivo' | 'transferencia',
+    monto: 30000,
+  });
+
+  // Modal Detalles / Edición
+  const [detalleOpen, setDetalleOpen] = useState(false);
+  const [detalleSocio, setDetalleSocio] = useState<Socio | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState<Partial<Socio>>({});
+
+  const sociosOrdenados = useMemo(() => {
+    const base = [...socios]
+      .map(s => ({ ...s, estadoLive: calcularEstadoSocio(s.fechaInicio) })) // estado en vivo
+      .sort((a, b) => b.carnet.localeCompare(a.carnet));
+    const filtrados = base.filter(s => {
+      if (filtroEstado !== 'todos' && s.estadoLive !== filtroEstado) return false;
+      const q = query.trim().toLowerCase();
+      if (!q) return true;
+      return s.carnet.toLowerCase().includes(q) || s.nombreCompleto.toLowerCase().includes(q);
+    });
+    return filtrados;
+  }, [socios, filtroEstado, query]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.nombreCompleto || !formData.dni) {
+      alert('Por favor complete al menos Nombre y DNI');
+      return;
+    }
+    onAddSocio(formData);
+    setFormData({
+      nombreCompleto: '',
+      dni: '',
+      telefono: '',
+      fechaInicio: new Date().toISOString().split('T')[0],
+      formaPago: 'efectivo',
+      monto: 30000,
+    });
+    setShowForm(false);
+  };
+
+  const openDetalles = (s: Socio) => {
+    setDetalleSocio(s);
+    setEditMode(false);
+    setEditData({
+      nombreCompleto: s.nombreCompleto,
+      dni: s.dni,
+      telefono: s.telefono || '',
+      fechaInicio: s.fechaInicio.slice(0, 10),
+      formaPago: s.formaPago,
+      monto: s.monto,
+    });
+    setDetalleOpen(true);
+  };
+
+  const guardarEdicion = () => {
+    if (!detalleSocio) return;
+    const patch: Partial<Omit<Socio, 'id' | 'carnet'>> = {
+      nombreCompleto: (editData.nombreCompleto ?? detalleSocio.nombreCompleto).toString(),
+      dni: (editData.dni ?? detalleSocio.dni).toString(),
+      telefono: (editData.telefono ?? detalleSocio.telefono) || '',
+      fechaInicio: (editData.fechaInicio ?? detalleSocio.fechaInicio).toString(),
+      formaPago: (editData.formaPago as any) ?? detalleSocio.formaPago,
+      monto: Number(editData.monto ?? detalleSocio.monto),
+    };
+    onUpdateSocio(detalleSocio.id, patch);
+    setEditMode(false);
+  };
+
+  const eliminarSocio = () => {
+    if (!detalleSocio) return;
+    const pass = prompt('Ingresá clave de administrador para eliminar (4 dígitos):');
+    if (pass !== '2580') {
+      alert('Clave incorrecta.');
+      return;
+    }
+    if (!confirm(`¿Eliminar socio ${detalleSocio.carnet} - ${detalleSocio.nombreCompleto}?`)) return;
+    onDeleteSocio(detalleSocio.id);
+    setDetalleOpen(false);
+    setDetalleSocio(null);
+  };
+
+  const renovar = () => {
+    if (!detalleSocio) return;
+    onRenovar(detalleSocio.id);
+    // refresco visual inmediato del modal
+    const hoy = new Date().toISOString().slice(0, 10);
+    setEditData(d => ({ ...d, fechaInicio: hoy }));
+  };
+
+  return (
+    <div className="space-y-8">
+      {/* Header y acciones */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+        <h2 className="text-3xl font-bold text-gray-800">Gestión de Socios</h2>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => exportCarnetsJSONFile()}
+            disabled={socios.length === 0}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors shadow-md border
+              ${socios.length === 0 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white hover:bg-gray-50'}`}
+            title="Exportar carnets (JSON)"
+          >
+            <Download className="w-4 h-4" />
+            Exportar JSON
+          </button>
+          <button
+            onClick={() => exportCarnetsCSVFile()}
+            disabled={socios.length === 0}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors shadow-md border
+              ${socios.length === 0 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white hover:bg-gray-50'}`}
+            title="Exportar carnets (CSV)"
+          >
+            <Download className="w-4 h-4" />
+            Exportar CSV
+          </button>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-md"
+          >
+            <Plus className="w-5 h-5" />
+            Nuevo Socio
+          </button>
+        </div>
+      </div>
+
+      {/* Filtros y búsqueda */}
+      <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="flex flex-col md:flex-row gap-3 md:items-center">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-gray-600" />
+            <div className="flex rounded-lg overflow-hidden border">
+              {(['todos', 'vigente', 'vencido'] as FiltroEstado[]).map(f => (
+                <button
+                  key={f}
+                  className={`px-3 py-1 text-sm ${filtroEstado === f ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'}`}
+                  onClick={() => setFiltroEstado(f)}
+                >
+                  {f.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 md:ml-auto">
+            <Search className="w-4 h-4 text-gray-600" />
+            <input
+              className="border rounded px-3 py-2 w-full md:w-64"
+              placeholder="Buscar por carnet o nombre..."
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="flex items-center gap-3">
+            <User className="w-8 h-8 text-blue-600" />
+            <div>
+              <p className="text-sm text-gray-600">Total Socios</p>
+              <p className="text-2xl font-bold text-gray-800">{socios.length}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="flex items-center gap-3">
+            <Calendar className="w-8 h-8 text-green-600" />
+            <div>
+              <p className="text-sm text-gray-600">Socios Vigentes</p>
+              <p className="text-2xl font-bold text-gray-800">
+                {socios.filter(s => calcularEstadoSocio(s.fechaInicio) === 'vigente').length}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="flex items-center gap-3">
+            <DollarSign className="w-8 h-8 text-yellow-600" />
+            <div>
+              <p className="text-sm text-gray-600">Próximo Carnet</p>
+              <p className="text-2xl font-bold text-gray-800">
+                {generarNumeroCarnet(contadorCarnet)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Grilla de carnets */}
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <h3 className="text-xl font-semibold text-gray-800 mb-6">Carnets de Socios</h3>
+        {sociosOrdenados.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            <User className="w-16 h-16 mx-auto mb-4 opacity-50" />
+            <p className="text-lg">No hay socios para mostrar</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sociosOrdenados.map((socio) => {
+              const estadoLive = calcularEstadoSocio(socio.fechaInicio);
+              return (
+                <div
+                  key={socio.id}
+                  className={`border-2 rounded-lg p-6 transition-all duration-200 hover:shadow-lg ${
+                    estadoLive === 'vigente'
+                      ? 'border-green-500 bg-green-50 hover:bg-green-100'
+                      : 'border-red-500 bg-red-50 hover:bg-red-100'
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="text-2xl font-bold text-gray-800">APOLO GYM</div>
+                    <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      estadoLive === 'vigente' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+                    }`}>
+                      {estadoLive.toUpperCase()}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-lg font-semibold text-gray-700">Carnet: {socio.carnet}</div>
+                    <div className="text-sm text-gray-600">{socio.nombreCompleto}</div>
+                    <div className="text-sm text-gray-600">DNI: {socio.dni}</div>
+                    {socio.telefono && (
+                      <div className="text-sm text-gray-600">Tel: {socio.telefono}</div>
+                    )}
+                    <div className="text-sm text-gray-600">
+                      Inicio: {new Date(socio.fechaInicio).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <button
+                    className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                    onClick={() => openDetalles(socio)}
+                  >
+                    <Eye className="w-4 h-4" />
+                    Ver Detalles
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Modal Nuevo Socio */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <h3 className="text-2xl font-bold text-gray-800 mb-6">Nuevo Socio</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo *</label>
+                <input
+                  type="text"
+                  value={formData.nombreCompleto}
+                  onChange={(e) => setFormData({ ...formData, nombreCompleto: e.target.value })}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">DNI *</label>
+                  <input
+                    type="text"
+                    value={formData.dni}
+                    onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                  <input
+                    type="tel"
+                    value={formData.telefono}
+                    onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="11-xxxx-xxxx"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio</label>
+                  <input
+                    type="date"
+                    value={formData.fechaInicio}
+                    onChange={(e) => setFormData({ ...formData, fechaInicio: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Forma de Pago</label>
+                  <select
+                    value={formData.formaPago}
+                    onChange={(e) => setFormData({ ...formData, formaPago: e.target.value as 'efectivo' | 'transferencia' })}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="efectivo">Efectivo</option>
+                    <option value="transferencia">Transferencia</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+                <input
+                  type="number"
+                  value={formData.monto}
+                  onChange={(e) => setFormData({ ...formData, monto: Number(e.target.value) })}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
+                  Crear Socio
+                </button>
+                <button type="button" onClick={() => setShowForm(false)} className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 rounded-lg">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Detalles / Editar / Renovar / Eliminar */}
+      {detalleOpen && detalleSocio && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-2xl mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Detalle del Socio</h3>
+              <button className="text-gray-500 hover:text-gray-700" onClick={() => setDetalleOpen(false)}>✕</button>
+            </div>
+
+            {!editMode ? (
+              <div className="space-y-3">
+                <div className="grid md:grid-cols-2 gap-3">
+                  <div><span className="text-gray-500 text-sm">Carnet</span><div className="font-semibold">{detalleSocio.carnet}</div></div>
+                  <div><span className="text-gray-500 text-sm">Estado</span>
+                    <div className={`inline-block px-2 py-0.5 rounded text-white text-sm ${
+                      calcularEstadoSocio(detalleSocio.fechaInicio) === 'vigente' ? 'bg-green-600' : 'bg-red-600'}`}>
+                      {calcularEstadoSocio(detalleSocio.fechaInicio).toUpperCase()}
+                    </div>
+                  </div>
+                  <div><span className="text-gray-500 text-sm">Nombre</span><div>{detalleSocio.nombreCompleto}</div></div>
+                  <div><span className="text-gray-500 text-sm">DNI</span><div>{detalleSocio.dni}</div></div>
+                  <div><span className="text-gray-500 text-sm">Teléfono</span><div>{detalleSocio.telefono || '—'}</div></div>
+                  <div><span className="text-gray-500 text-sm">Inicio</span><div>{new Date(detalleSocio.fechaInicio).toLocaleDateString()}</div></div>
+                  <div><span className="text-gray-500 text-sm">Forma de pago</span><div>{detalleSocio.formaPago}</div></div>
+                  <div><span className="text-gray-500 text-sm">Monto</span><div>${detalleSocio.monto.toLocaleString('es-AR')}</div></div>
+                </div>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <button
+                    onClick={() => setEditMode(true)}
+                    className="px-3 py-2 rounded bg-gray-800 text-white flex items-center gap-2"
+                  >
+                    <Pencil className="w-4 h-4" /> Editar
+                  </button>
+                  <button
+                    onClick={renovar}
+                    className="px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2"
+                  >
+                    <RefreshCw className="w-4 h-4" /> Renovar
+                  </button>
+                  <button
+                    onClick={eliminarSocio}
+                    className="px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" /> Eliminar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="grid md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-sm text-gray-600">Nombre</label>
+                    <input
+                      className="border rounded px-3 py-2 w-full"
+                      value={(editData.nombreCompleto as string) ?? ''}
+                      onChange={e => setEditData(d => ({ ...d, nombreCompleto: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">DNI</label>
+                    <input
+                      className="border rounded px-3 py-2 w-full"
+                      value={(editData.dni as string) ?? ''}
+                      onChange={e => setEditData(d => ({ ...d, dni: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">Teléfono</label>
+                    <input
+                      className="border rounded px-3 py-2 w-full"
+                      value={(editData.telefono as string) ?? ''}
+                      onChange={e => setEditData(d => ({ ...d, telefono: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">Fecha Inicio</label>
+                    <input
+                      type="date"
+                      className="border rounded px-3 py-2 w-full"
+                      value={(editData.fechaInicio as string) ?? detalleSocio.fechaInicio.slice(0,10)}
+                      onChange={e => setEditData(d => ({ ...d, fechaInicio: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">Forma de Pago</label>
+                    <select
+                      className="border rounded px-3 py-2 w-full"
+                      value={(editData.formaPago as any) ?? detalleSocio.formaPago}
+                      onChange={e => setEditData(d => ({ ...d, formaPago: e.target.value as any }))}
+                    >
+                      <option value="efectivo">Efectivo</option>
+                      <option value="transferencia">Transferencia</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">Monto</label>
+                    <input
+                      type="number"
+                      className="border rounded px-3 py-2 w-full"
+                      value={Number(editData.monto ?? detalleSocio.monto)}
+                      onChange={e => setEditData(d => ({ ...d, monto: Number(e.target.value) }))}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-2">
+                  <button onClick={guardarEdicion} className="px-4 py-2 rounded bg-blue-600 text-white">Guardar</button>
+                  <button onClick={() => setEditMode(false)} className="px-4 py-2 rounded bg-gray-200">Cancelar</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+================================================================================
+src/pages/BuscarCarnet.tsx
+================================================================================
+import React, { useMemo, useState } from 'react';
+import { Socio } from '../types';
+import { Search, Pencil, Trash2, ArrowLeft, Save } from 'lucide-react';
+import { calcularEstadoSocio } from '../utils/localStorage';
+
+interface BuscarCarnetProps {
+  socios: Socio[];
+  onNavigateBack: () => void;
+  onUpdateSocio: (socioId: string, updates: Partial<Omit<Socio, 'id' | 'carnet'>>) => void;
+  onDeleteSocio: (socioId: string) => void;
+}
+
+export const BuscarCarnet: React.FC<BuscarCarnetProps> = ({
+  socios,
+  onNavigateBack,
+  onUpdateSocio,
+  onDeleteSocio,
+}) => {
+  const [query, setQuery] = useState('');
+  const [editSocio, setEditSocio] = useState<Socio | null>(null);
+  const [msg, setMsg] = useState<string | null>(null);
+
+  const resultados = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return socios.filter(s =>
+      s.carnet.toLowerCase().includes(q) || s.nombreCompleto.toLowerCase().includes(q)
+    ).sort((a, b) => b.carnet.localeCompare(a.carnet));
+  }, [socios, query]);
+
+  function abrirEdicion(s: Socio) {
+    setEditSocio({ ...s });
+    setMsg(null);
+  }
+
+  function cancelarEdicion() {
+    setEditSocio(null);
+  }
+
+  function guardarCambios() {
+    if (!editSocio) return;
+
+    // Validaciones básicas
+    if (!editSocio.nombreCompleto.trim() || !editSocio.dni.trim()) {
+      setMsg('Completá nombre y DNI.');
+      return;
+    }
+
+    // (Opcional) validar que el carnet no se repita si lo permitís editar
+    const existe = socios.some(s => s.id !== editSocio.id && s.carnet === editSocio.carnet);
+    if (existe) {
+      setMsg(`Ya existe el carnet ${editSocio.carnet}.`);
+      return;
+    }
+
+    // Recalcular estado por si cambió fechaInicio
+    const estado = calcularEstadoSocio(editSocio.fechaInicio);
+    const updates: Partial<Omit<Socio, 'id' | 'carnet'>> = {
+      nombreCompleto: editSocio.nombreCompleto,
+      dni: editSocio.dni,
+      telefono: editSocio.telefono,
+      fechaInicio: editSocio.fechaInicio,
+      formaPago: editSocio.formaPago,
+      monto: editSocio.monto,
+      estado
+    };
+    onUpdateSocio(editSocio.id, updates);
+    setEditSocio(null);
+    setMsg('Cambios guardados.');
+  }
+
+  function eliminarSocio(id: string) {
+    if (!confirm('¿Eliminar este socio? Esta acción no se puede deshacer.')) return;
+    onDeleteSocio(id);
+    setMsg('Socio eliminado.');
+    if (editSocio?.id === id) setEditSocio(null);
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={onNavigateBack}
+          className="inline-flex items-center gap-2 px-3 py-2 border rounded hover:bg-gray-50"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Volver
+        </button>
+        <h2 className="text-2xl font-bold text-gray-800">Buscar Carnet</h2>
+        <div />
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Search className="w-5 h-5 text-gray-500" />
+        <input
+          autoFocus
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Ingresá N° de carnet (25-001) o nombre..."
+          className="w-full border rounded px-3 py-2"
+          onKeyDown={e => {
+            if (e.key === 'Enter' && resultados.length === 1) abrirEdicion(resultados[0]);
+          }}
+        />
+      </div>
+
+      {msg && <div className="text-sm text-gray-700">{msg}</div>}
+
+      {/* Resultados */}
+      <div className="bg-white rounded-lg shadow p-4">
+        {resultados.length === 0 ? (
+          <div className="text-gray-500">Sin resultados.</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {resultados.map(s => (
+              <div
+                key={s.id}
+                className={`border-2 rounded-lg p-4 ${s.estado === 'vigente' ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="font-semibold text-gray-800">Carnet: {s.carnet}</div>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${s.estado === 'vigente' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}`}>
+                    {s.estado.toUpperCase()}
+                  </span>
+                </div>
+                <div className="mt-2 text-sm text-gray-700">
+                  <div className="font-medium">{s.nombreCompleto}</div>
+                  <div>DNI: {s.dni}</div>
+                  <div>Inicio: {new Date(s.fechaInicio).toLocaleDateString()}</div>
+                  <div>Pago: {s.formaPago} — ${s.monto}</div>
+                </div>
+                <div className="mt-3 flex gap-2">
+                  <button
+                    onClick={() => abrirEdicion(s)}
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 border rounded hover:bg-gray-50"
+                  >
+                    <Pencil className="w-4 h-4" />
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => eliminarSocio(s.id)}
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 border rounded text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Modal de edición */}
+      {editSocio && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-xl">
+            <h3 className="text-lg font-semibold mb-4">Editar socio</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Carnet</label>
+                <input
+                  value={editSocio.carnet}
+                  onChange={e => setEditSocio({ ...editSocio, carnet: e.target.value })}
+                  className="w-full border rounded px-3 py-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Nombre completo</label>
+                <input
+                  value={editSocio.nombreCompleto}
+                  onChange={e => setEditSocio({ ...editSocio, nombreCompleto: e.target.value })}
+                  className="w-full border rounded px-3 py-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">DNI</label>
+                <input
+                  value={editSocio.dni}
+                  onChange={e => setEditSocio({ ...editSocio, dni: e.target.value })}
+                  className="w-full border rounded px-3 py-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Fecha de inicio</label>
+                <input
+                  type="date"
+                  value={editSocio.fechaInicio}
+                  onChange={e => setEditSocio({ ...editSocio, fechaInicio: e.target.value })}
+                  className="w-full border rounded px-3 py-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Forma de pago</label>
+                <select
+                  value={editSocio.formaPago}
+                  onChange={e => setEditSocio({ ...editSocio, formaPago: e.target.value as 'efectivo' | 'transferencia' })}
+                  className="w-full border rounded px-3 py-2"
+                >
+                  <option value="efectivo">Efectivo</option>
+                  <option value="transferencia">Transferencia</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Monto</label>
+                <input
+                  type="number"
+                  value={editSocio.monto}
+                  onChange={e => setEditSocio({ ...editSocio, monto: Number(e.target.value) })}
+                  className="w-full border rounded px-3 py-2"
+                />
+              </div>
+            </div>
+
+            {msg && <div className="mt-3 text-sm text-gray-700">{msg}</div>}
+
+            <div className="mt-5 flex gap-2">
+              <button
+                onClick={guardarCambios}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+              >
+                <Save className="w-4 h-4" />
+                Guardar
+              </button>
+              <button
+                onClick={cancelarEdicion}
+                className="flex-1 border px-4 py-2 rounded hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+================================================================================
+src/pages/Caja.tsx
+================================================================================
+import React, { useMemo, useState } from 'react';
+import { CreditCard, DollarSign, ArrowDownCircle, ArrowUpCircle, ClipboardList, CalendarCheck } from 'lucide-react';
+import { Socio, Retiro, Gasto, Ingreso, Turno } from '../types';
+
+type Props = {
+  socios: Socio[];
+  retiros: Retiro[];
+  gastos: Gasto[];
+  ingresos: Ingreso[];
+  turnos: Turno[];
+  contadorRetiro: number;
+  onAddIngreso: (ingreso: Omit<Ingreso, 'id'>) => void;
+  onAddRetiro: (retiro: Omit<Retiro, 'id' | 'numero'>) => void;
+  onAddGasto: (gasto: Omit<Gasto, 'id'>) => void;
+  onIniciarTurno: (usuario: string, montoInicial: number) => void;
+  onCerrarTurno: (montoFinal: number) => void;
+};
+
+type Movimiento =
+  | { tipo: 'ingreso'; fecha: string; monto: number; detalle: string; sub: string }
+  | { tipo: 'retiro'; fecha: string; monto: number; detalle: string; sub: string }
+  | { tipo: 'gasto'; fecha: string; monto: number; detalle: string; sub: string };
+
+function inRange(iso: string, fromISO: string, toISO?: string) {
+  const t = new Date(iso).getTime();
+  const a = new Date(fromISO).getTime();
+  const b = toISO ? new Date(toISO).getTime() : Date.now();
+  return t >= a && t <= b;
+}
+
+function fmt(n: number) {
+  if (n == null || isNaN(n)) {
+    return '0.00';
+  }
+  return n.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+const Caja: React.FC<Props> = ({
+  socios,
+  retiros,
+  gastos,
+  ingresos,
+  turnos,
+  contadorRetiro,
+  onAddIngreso,
+  onAddRetiro,
+  onAddGasto,
+  onIniciarTurno,
+  onCerrarTurno,
+}) => {
+  const turnoAbierto = useMemo(() => turnos.find(t => !t.cerrado), [turnos]);
+
+  // Resúmenes del turno
+  const resumen = useMemo(() => {
+    if (!turnoAbierto) {
+      return {
+        montoInicial: 0,
+        ingresosEf: 0,
+        ingresosTx: 0,
+        retiros: 0,
+        gastos: 0,
+        efectivoDisponible: 0,
+      };
+    }
+    const from = turnoAbierto.fechaInicio;
+    const to = turnoAbierto.fechaFin;
+
+    const ingEf = ingresos
+      .filter(i => i.formaPago === 'efectivo' && inRange(i.fecha, from, to))
+      .reduce((a, b) => a + (b.monto || 0), 0);
+
+    const ingTx = ingresos
+      .filter(i => i.formaPago === 'transferencia' && inRange(i.fecha, from, to))
+      .reduce((a, b) => a + (b.monto || 0), 0);
+
+    const ret = retiros
+      .filter(r => inRange(r.fecha, from, to))
+      .reduce((a, b) => a + (b.monto || 0), 0);
+
+    const gas = gastos
+      .filter(g => inRange(g.fecha, from, to))
+      .reduce((a, b) => a + (b.monto || 0), 0);
+
+    const efectivo = (turnoAbierto.montoInicial || 0) + ingEf - ret - gas;
+    return {
+      montoInicial: turnoAbierto.montoInicial || 0,
+      ingresosEf: ingEf,
+      ingresosTx: ingTx,
+      retiros: ret,
+      gastos: gas,
+      efectivoDisponible: Math.max(0, Number(efectivo.toFixed(2))),
+    };
+  }, [turnoAbierto, ingresos, retiros, gastos]);
+
+  // Lista de movimientos del turno abierto
+  const movimientos: Movimiento[] = useMemo(() => {
+    if (!turnoAbierto) return [];
+    const from = turnoAbierto.fechaInicio;
+    const to = turnoAbierto.fechaFin;
+
+    const movIngr: Movimiento[] = ingresos
+      .filter(i => inRange(i.fecha, from, to))
+      .map(i => ({
+        tipo: 'ingreso' as const,
+        fecha: i.fecha,
+        monto: i.monto,
+        detalle: `${i.carnet} — ${i.nombreSocio}`,
+        sub: i.concepto === 'alta' ? 'Alta' : i.concepto === 'renovacion' ? 'Renovación' : (i.formaPago || ''),
+      }));
+
+    const movRet: Movimiento[] = retiros
+      .filter(r => inRange(r.fecha, from, to))
+      .map(r => ({
+        tipo: 'retiro' as const,
+        fecha: r.fecha,
+        monto: r.monto,
+        detalle: `Retiro #${r.numero}`,
+        sub: r.descripcion || '',
+      }));
+
+    const movGas: Movimiento[] = gastos
+      .filter(g => inRange(g.fecha, from, to))
+      .map(g => ({
+        tipo: 'gasto' as const,
+        fecha: g.fecha,
+        monto: g.monto,
+        detalle: `${g.proveedor} — ${g.motivo}`,
+        sub: g.remito ? `Remito: ${g.remito}` : '',
+      }));
+
+    return [...movIngr, ...movRet, ...movGas].sort(
+      (a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+    );
+  }, [turnoAbierto, ingresos, retiros, gastos]);
+
+  // Formularios
+  const [usr, setUsr] = useState('');
+  const [montoIni, setMontoIni] = useState<number>(0);
+
+  const [retMonto, setRetMonto] = useState<number>(0);
+  const [retDesc, setRetDesc] = useState('');
+
+  const [gasMonto, setGasMonto] = useState<number>(0);
+  const [gasProv, setGasProv] = useState('');
+  const [gasMotivo, setGasMotivo] = useState('');
+  const [gasRemito, setGasRemito] = useState('');
+
+  const [montoFinal, setMontoFinal] = useState<number>(0);
+
+  // Sugerir el monto final = efectivo disponible
+  React.useEffect(() => {
+    if (turnoAbierto) setMontoFinal(resumen.efectivoDisponible);
+  }, [turnoAbierto, resumen.efectivoDisponible]);
+
+  const puedeCerrar = turnoAbierto ? montoFinal <= resumen.efectivoDisponible + 0.0001 : false;
+
+  const iniciar = () => {
+    if (!usr.trim()) return alert('Ingresá el usuario del turno.');
+    onIniciarTurno(usr.trim(), Number(montoIni) || 0);
+    setUsr('');
+    setMontoIni(0);
+  };
+
+  const agregarRetiro = () => {
+    if (!turnoAbierto) return alert('Abrí un turno para registrar retiros.');
+    const m = Number(retMonto) || 0;
+    if (m <= 0) return alert('Monto inválido.');
+    onAddRetiro({ monto: m, fecha: new Date().toISOString(), descripcion: retDesc || undefined });
+    setRetMonto(0);
+    setRetDesc('');
+  };
+
+  const agregarGasto = () => {
+    if (!turnoAbierto) return alert('Abrí un turno para registrar gastos.');
+    const m = Number(gasMonto) || 0;
+    if (m <= 0) return alert('Monto inválido.');
+    if (!gasProv.trim() || !gasMotivo.trim()) return alert('Proveedor y motivo son obligatorios.');
+    onAddGasto({
+      monto: m,
+      proveedor: gasProv.trim(),
+      motivo: gasMotivo.trim(),
+      remito: gasRemito.trim(),
+      fecha: new Date().toISOString(),
+    });
+    setGasMonto(0);
+    setGasProv('');
+    setGasMotivo('');
+    setGasRemito('');
+  };
+
+  const cerrar = () => {
+    if (!turnoAbierto) return;
+    if (!puedeCerrar) {
+      return alert(
+        `El monto final ($${fmt(Number(montoFinal || 0))}) no puede exceder el efectivo disponible ($${fmt(resumen.efectivoDisponible)}).`
+      );
+    }
+    onCerrarTurno(Number(montoFinal) || 0);
+  };
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold text-gray-800">Caja</h2>
+        <div className="flex items-center gap-2 text-sm">
+          <CalendarCheck className="w-4 h-4 text-gray-500" />
+          {turnoAbierto ? (
+            <span className="text-green-700">
+              Turno abierto • {turnoAbierto.usuario} • {new Date(turnoAbierto.fechaInicio).toLocaleString()}
+            </span>
+          ) : (
+            <span className="text-red-700">No hay turno abierto</span>
+          )}
+        </div>
+      </div>
+
+      {/* Iniciar turno */}
+      {!turnoAbierto && (
+        <div className="bg-white border rounded-xl p-4 shadow-sm">
+          <h3 className="font-semibold text-gray-800 mb-3">Iniciar turno</h3>
+          <div className="grid md:grid-cols-3 gap-3">
+            <input
+              placeholder="Usuario"
+              className="border rounded px-3 py-2"
+              value={usr}
+              onChange={e => setUsr(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Monto inicial"
+              className="border rounded px-3 py-2"
+              value={montoIni}
+              onChange={e => setMontoIni(Number(e.target.value))}
+              min={0}
+            />
+            <button onClick={iniciar} className="bg-blue-600 hover:bg-blue-700 text-white rounded px-4">
+              Iniciar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Resumen turno */}
+      {turnoAbierto && (
+        <>
+          <div className="grid md:grid-cols-5 gap-4">
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                <DollarSign className="w-4 h-4" /> Monto inicial
+              </div>
+              <div className="text-2xl font-bold mt-1">${fmt(resumen.montoInicial)}</div>
+            </div>
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                <CreditCard className="w-4 h-4" /> Ingresos (efectivo)
+              </div>
+              <div className="text-2xl font-bold mt-1 text-green-700">+ ${fmt(resumen.ingresosEf)}</div>
+            </div>
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                <CreditCard className="w-4 h-4" /> Ingresos (transferencia)
+              </div>
+              <div className="text-2xl font-bold mt-1">+ ${fmt(resumen.ingresosTx)}</div>
+            </div>
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                <ArrowUpCircle className="w-4 h-4" /> Retiros
+              </div>
+              <div className="text-2xl font-bold mt-1 text-red-700">- ${fmt(resumen.retiros)}</div>
+            </div>
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                <ArrowDownCircle className="w-4 h-4" /> Gastos
+              </div>
+              <div className="text-2xl font-bold mt-1 text-red-700">- ${fmt(resumen.gastos)}</div>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                <ClipboardList className="w-4 h-4" /> Métricas del turno
+              </div>
+              <div className="mt-3 space-y-1">
+                <div>Altas de carnet: <span className="font-semibold">{turnoAbierto.metrics?.altasCarnet ?? 0}</span></div>
+                <div>Renovaciones: <span className="font-semibold">{turnoAbierto.metrics?.renovaciones ?? 0}</span></div>
+              </div>
+            </div>
+
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                <DollarSign className="w-4 h-4" /> Efectivo disponible
+              </div>
+              <div className="text-3xl font-extrabold mt-1">${fmt(resumen.efectivoDisponible)}</div>
+              <div className="text-xs text-gray-500 mt-1">= Inicial + Ingresos (efectivo) − Retiros − Gastos</div>
+            </div>
+
+            {/* Cierre de turno */}
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="font-semibold text-gray-800 mb-2">Cerrar turno</div>
+              <label className="text-sm text-gray-600">Monto final (sugerido: efectivo disponible)</label>
+              <input
+                type="number"
+                className="border rounded px-3 py-2 w-full mt-1"
+                value={montoFinal}
+                onChange={e => setMontoFinal(Number(e.target.value))}
+                min={0}
+              />
+              {!puedeCerrar && (
+                <div className="text-red-600 text-sm mt-1">
+                  El monto final no puede exceder ${fmt(resumen.efectivoDisponible)}.
+                </div>
+              )}
+              <button
+                onClick={cerrar}
+                className={`mt-3 w-full rounded px-4 py-2 text-white ${puedeCerrar ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
+                disabled={!puedeCerrar}
+              >
+                Cerrar turno
+              </button>
+            </div>
+          </div>
+
+          {/* Formularios rápidos: Retiro / Gasto */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="font-semibold mb-2">Registrar Retiro</div>
+              <div className="grid sm:grid-cols-[1fr_auto] gap-2">
+                <input
+                  type="number"
+                  placeholder="Monto"
+                  className="border rounded px-3 py-2"
+                  value={retMonto}
+                  onChange={e => setRetMonto(Number(e.target.value))}
+                  min={0}
+                />
+                <input
+                  placeholder="Descripción (opcional)"
+                  className="border rounded px-3 py-2 sm:col-span-2"
+                  value={retDesc}
+                  onChange={e => setRetDesc(e.target.value)}
+                />
+                <button onClick={agregarRetiro} className="bg-amber-600 hover:bg-amber-700 text-white rounded px-4 py-2 sm:col-span-2">
+                  Agregar Retiro
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-white border rounded-xl p-4 shadow-sm">
+              <div className="font-semibold mb-2">Registrar Gasto</div>
+              <div className="grid gap-2">
+                <input
+                  type="number"
+                  placeholder="Monto"
+                  className="border rounded px-3 py-2"
+                  value={gasMonto}
+                  onChange={e => setGasMonto(Number(e.target.value))}
+                  min={0}
+                />
+                <input
+                  placeholder="Proveedor"
+                  className="border rounded px-3 py-2"
+                  value={gasProv}
+                  onChange={e => setGasProv(e.target.value)}
+                />
+                <input
+                  placeholder="Motivo"
+                  className="border rounded px-3 py-2"
+                  value={gasMotivo}
+                  onChange={e => setGasMotivo(e.target.value)}
+                />
+                <input
+                  placeholder="Remito (opcional)"
+                  className="border rounded px-3 py-2"
+                  value={gasRemito}
+                  onChange={e => setGasRemito(e.target.value)}
+                />
+                <button onClick={agregarGasto} className="bg-rose-600 hover:bg-rose-700 text-white rounded px-4 py-2">
+                  Agregar Gasto
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Movimientos del turno */}
+          <div className="bg-white border rounded-xl p-4 shadow-sm">
+            <h3 className="font-semibold text-gray-800 mb-3">Movimientos del turno</h3>
+            <div className="overflow-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="text-left p-2">Fecha/Hora</th>
+                    <th className="text-left p-2">Tipo</th>
+                    <th className="text-left p-2">Detalle</th>
+                    <th className="text-right p-2">Monto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {movimientos.length === 0 && (
+                    <tr>
+                      <td className="p-3 text-gray-500" colSpan={4}>Sin movimientos en este turno.</td>
+                    </tr>
+                  )}
+                  {movimientos.map((m, idx) => (
+                    <tr key={idx} className="border-t">
+                      <td className="p-2">{new Date(m.fecha).toLocaleString()}</td>
+                      <td className="p-2 capitalize">
+                        {m.tipo === 'ingreso' ? 'Ingreso' : m.tipo === 'retiro' ? 'Retiro' : 'Gasto'}
+                        {m.sub ? <span className="ml-2 text-xs text-gray-500">({m.sub})</span> : null}
+                      </td>
+                      <td className="p-2">{m.detalle}</td>
+                      <td className={`p-2 text-right ${m.tipo === 'ingreso' ? 'text-green-700' : 'text-red-700'}`}>
+                        {m.tipo === 'ingreso' ? '+' : '-'} ${fmt(m.monto)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Historial de cierres */}
+      <div className="bg-white border rounded-xl p-4 shadow-sm">
+        <h3 className="font-semibold text-gray-800 mb-3">Cierres de turno</h3>
+        <div className="overflow-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="text-left p-2">Inicio</th>
+                <th className="text-left p-2">Fin</th>
+                <th className="text-left p-2">Usuario</th>
+                <th className="text-right p-2">Inicial</th>
+                <th className="text-right p-2">Final</th>
+                <th className="text-right p-2">Recaudación</th>
+                <th className="text-right p-2">Altas</th>
+                <th className="text-right p-2">Renovaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {turnos.filter(t => t.cerrado).length === 0 && (
+                <tr>
+                  <td className="p-3 text-gray-500" colSpan={8}>Sin cierres aún.</td>
+                </tr>
+              )}
+              {turnos
+                .filter(t => t.cerrado)
+                .sort((a, b) => new Date(b.fechaFin || 0).getTime() - new Date(a.fechaFin || 0).getTime())
+                .map(t => (
+                  <tr key={t.id} className="border-t">
+                    <td className="p-2">{new Date(t.fechaInicio).toLocaleString()}</td>
+                    <td className="p-2">{t.fechaFin ? new Date(t.fechaFin).toLocaleString() : '-'}</td>
+                    <td className="p-2">{t.usuario}</td>
+                    <td className="p-2 text-right">${fmt(t.montoInicial || 0)}</td>
+                    <td className="p-2 text-right">${fmt(t.montoFinal || 0)}</td>
+                    <td className="p-2 text-right">${fmt(t.recaudacion || 0)}</td>
+                    <td className="p-2 text-right">{t.metrics?.altasCarnet ?? 0}</td>
+                    <td className="p-2 text-right">{t.metrics?.renovaciones ?? 0}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Caja;
+
+================================================================================
+src/pages/Backups.tsx
+================================================================================
+// src/pages/Backups.tsx
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  exportBackupManual,
+  importBackupManual,
+  chooseBackupFolder,
+  configureAutoBackup,
+  getDataPath,
+  getWebBackupFolderName,
+} from '../utils/localStorage';
+import { Download, Upload, FolderOpen, Clock, RefreshCw, Monitor, Globe } from 'lucide-react';
+
+type Mode = 'interval' | 'time';
+
+export default function Backups() {
+  const isDesktop = typeof window !== 'undefined' && !!(window as any).electronAPI;
+  const fsAccessSupported = typeof window !== 'undefined' && typeof (window as any).showDirectoryPicker === 'function';
+
+  const [folder, setFolder] = useState<string>('');
+  const [enabled, setEnabled] = useState<boolean>(false);
+
+  const [mode, setMode] = useState<Mode>('interval');
+  const [everyValue, setEveryValue] = useState<number>(60);
+  const [everyUnit, setEveryUnit] = useState<'minutes' | 'hours' | 'days'>('minutes');
+
+  const [time, setTime] = useState<string>('23:59');
+
+  const [msg, setMsg] = useState<string | null>(null);
+  const [dataPath, setDataPath] = useState<string>('');
+
+  const webIntervalRef = useRef<number | null>(null);
+  const webTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    getDataPath().then((p) => p && setDataPath(p));
+    // Si ya hay carpeta elegida en Web, mostrar su nombre
+    getWebBackupFolderName().then((name) => name && setFolder(name));
+  }, []);
+
+  const everyMs = useMemo(() => {
+    const v = Number(everyValue) || 0;
+    const factor = everyUnit === 'minutes' ? 60_000 : everyUnit === 'hours' ? 3_600_000 : 86_400_000;
+    return v * factor;
+  }, [everyValue, everyUnit]);
+
+  function clearWebSchedulers() {
+    if (webIntervalRef.current) {
+      clearInterval(webIntervalRef.current);
+      webIntervalRef.current = null;
+    }
+    if (webTimeoutRef.current) {
+      clearTimeout(webTimeoutRef.current);
+      webTimeoutRef.current = null;
+    }
+  }
+
+  async function doWebBackupTick() {
+    try {
+      const r = await exportBackupManual(); // ahora escribe en carpeta elegida (FS Access) o descarga
+      if (!r.ok) throw new Error(r.error || 'falló exportación');
+    } catch (e: any) {
+      setMsg(`❌ Error generando backup: ${e?.message || 'desconocido'}`);
+    }
+  }
+
+  // Programación automática en Web (mientras pestaña abierta)
+  useEffect(() => {
+    if (isDesktop) return; // En escritorio programa el proceso de Electron
+    clearWebSchedulers();
+
+    if (!enabled) return;
+
+    if (mode === 'interval') {
+      const ms = Math.max(60_000, everyMs || 0);
+      void doWebBackupTick(); // uno inmediato
+      webIntervalRef.current = window.setInterval(doWebBackupTick, ms);
+      setMsg(`🕒 Web: backup cada ${Math.round(ms / 60000)} min. (requiere pestaña abierta)`);
+    } else {
+      const [HH, MM] = (time || '23:59').split(':').map((n) => parseInt(n, 10));
+      const planNext = () => {
+        const now = new Date();
+        const next = new Date();
+        next.setHours(HH || 23, MM || 59, 0, 0);
+        if (next <= now) next.setDate(next.getDate() + 1);
+        const delay = next.getTime() - now.getTime();
+        webTimeoutRef.current = window.setTimeout(async () => {
+          await doWebBackupTick();
+          planNext();
+        }, delay);
+        const mins = Math.round(delay / 60000);
+        setMsg(`🕒 Web: próximo backup en ~${mins} min (pestaña abierta).`);
+      };
+      planNext();
+    }
+
+    return () => clearWebSchedulers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled, mode, everyMs, time, isDesktop]);
+
+  async function exportar() {
+    try {
+      const r = await exportBackupManual();
+      setMsg(r.ok ? '✅ Backup exportado' : `❌ Error: ${r.error || 'desconocido'}`);
+    } catch (e: any) {
+      setMsg(`❌ Error exportando: ${e?.message || 'desconocido'}`);
+    }
+  }
+
+  async function importar() {
+    try {
+      const r = await importBackupManual();
+      setMsg(r.ok ? '✅ Backup importado' : `❌ Error: ${r.error || 'desconocido'}`);
+    } catch (e: any) {
+      setMsg(`❌ Error importando: ${e?.message || 'desconocido'}`);
+    }
+  }
+
+  async function pickFolder() {
+    try {
+      const f = await chooseBackupFolder(); // en desktop usa dialog nativo; en web abre showDirectoryPicker
+      if (f) {
+        setFolder(f);
+        setMsg(`📁 Carpeta seleccionada: ${f}`);
+      } else {
+        setMsg(isDesktop ? 'ℹ️ Selección cancelada.' : 'ℹ️ No se seleccionó carpeta o sin permisos.');
+      }
+    } catch (e: any) {
+      setMsg(`❌ Error eligiendo carpeta: ${e?.message || 'desconocido'}`);
+    }
+  }
+
+  async function guardarProg() {
+    if (!isDesktop) {
+      setMsg('✅ En Web no hace falta "guardar": al activar se programa mientras la pestaña esté abierta.');
+      return;
+    }
+    if (enabled && !folder) {
+      setMsg('Elegí una carpeta destino primero.');
+      return;
+    }
+    try {
+      const ok = await configureAutoBackup({
+        enabled,
+        folder,
+        mode,
+        everyMs: mode === 'interval' ? everyMs : undefined,
+        time: mode === 'time' ? time : undefined,
+      });
+      setMsg(ok ? '🕒 Programación guardada (Escritorio)' : '❌ No se pudo programar');
+    } catch (e: any) {
+      setMsg(`❌ Error guardando programación: ${e?.message || 'desconocido'}`);
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-800">Backups</h2>
+        <div
+          className={`flex items-center gap-2 text-xs px-2 py-1 rounded ${
+            isDesktop ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+          }`}
+          title={isDesktop ? 'Ejecutando en Electron (app de escritorio)' : 'Ejecutando en navegador (Vite)'}
+        >
+          {isDesktop ? <Monitor className="w-4 h-4" /> : <Globe className="w-4 h-4" />}
+          {isDesktop ? 'Escritorio' : 'Web'}
+        </div>
+      </div>
+
+      <p className="text-sm text-gray-600">
+        Archivo de datos actual: <span className="font-mono">{dataPath || '-'}</span>
+      </p>
+
+      {msg && <div className="px-3 py-2 bg-gray-50 border rounded text-sm">{msg}</div>}
+
+      {/* Manual */}
+      <div className="flex flex-wrap gap-3">
+        <button onClick={exportar} className="px-4 py-2 border rounded flex items-center gap-2">
+          <Download className="w-4 h-4" />
+          Exportar backup (JSON)
+        </button>
+        <button onClick={importar} className="px-4 py-2 border rounded flex items-center gap-2">
+          <Upload className="w-4 h-4" />
+          Importar backup (JSON)
+        </button>
+      </div>
+
+      {/* Automático */}
+      <div className="border rounded p-4 space-y-3 bg-white">
+        <h3 className="font-semibold flex items-center gap-2">
+          <Clock className="w-4 h-4" />
+          Backup automático
+        </h3>
+
+        <div className="flex items-center gap-4">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={enabled}
+              onChange={(e) => setEnabled(e.target.checked)}
+            />
+            Activar {isDesktop ? '(Escritorio)' : '(Web — requiere pestaña abierta)'}
+          </label>
+
+          <div className="flex items-center gap-2">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="mode"
+                value="interval"
+                checked={mode === 'interval'}
+                onChange={() => setMode('interval')}
+              />
+              Intervalo
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="mode"
+                value="time"
+                checked={mode === 'time'}
+                onChange={() => setMode('time')}
+              />
+              Hora diaria
+            </label>
+          </div>
+        </div>
+
+        {mode === 'interval' ? (
+          <div className="flex items-center gap-2">
+            <span>Cada</span>
+            <input
+              type="number"
+              min={1}
+              value={everyValue}
+              onChange={(e) => setEveryValue(Number(e.target.value))}
+              className="w-24 border rounded px-2 py-1"
+            />
+            <select
+              className="border rounded px-2 py-1"
+              value={everyUnit}
+              onChange={(e) => setEveryUnit(e.target.value as any)}
+            >
+              <option value="minutes">minutos</option>
+              <option value="hours">horas</option>
+              <option value="days">días</option>
+            </select>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <label className="flex items-center gap-2">
+              Hora:
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="border rounded px-2 py-1"
+              />
+            </label>
+          </div>
+        )}
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={pickFolder}
+            className="px-3 py-2 border rounded flex items-center gap-2"
+            title={
+              isDesktop
+                ? 'Elegir carpeta destino (Escritorio)'
+                : fsAccessSupported
+                ? 'Elegir carpeta destino (Web, requiere permisos)'
+                : 'Tu navegador no soporta File System Access API'
+            }
+          >
+            <FolderOpen className="w-4 h-4" />
+            Elegir carpeta…
+          </button>
+          <span className="text-sm text-gray-600 truncate">
+            {folder ? folder : fsAccessSupported ? '- sin seleccionar -' : '- navegador sin soporte -'}
+          </span>
+        </div>
+
+        <button
+          onClick={guardarProg}
+          className="px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Guardar programación
+        </button>
+
+        <p className="text-xs text-gray-500">
+          En Web, los backups automáticos escriben en la carpeta elegida (si diste permisos) o descargan el archivo
+          en tu equipo. En Escritorio se guardan en la carpeta seleccionada (ideal: una carpeta de tu Google Drive
+          para sincronizar).
+        </p>
+      </div>
+    </div>
+  );
+}
+
+================================================================================
+src/hooks/useGymData.ts
+================================================================================
+import { useState, useEffect } from 'react';
+import { DatosGimnasio, Socio, Retiro, Gasto, Ingreso, Turno } from '../types';
+import { loadData, saveData, generarNumeroCarnet, generarNumeroRetiro, calcularEstadoSocio } from '../utils/localStorage';
+
+export const useGymData = () => {
+  const [data, setData] = useState<DatosGimnasio>({
+    socios: [],
+    retiros: [],
+    gastos: [],
+    ingresos: [],
+    turnos: [],
+    contadores: {
+      carnet: 1,
+      retiro: 1,
+    },
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Cargar datos al inicializar
+  useEffect(() => {
+    const initializeData = async () => {
+      try {
+        const loadedData = await loadData();
+        setData(loadedData);
+      } catch (error) {
+        console.error('Error inicializando datos:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initializeData();
+  }, []);
+
+  // Guardar datos cuando cambien
+  useEffect(() => {
+    if (!isLoading) {
+      saveData(data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  /** Helpers turno */
+  const getOpenTurnoIndex = (list: Turno[]) => list.findIndex(t => !t.cerrado);
+  const nowISO = () => new Date().toISOString();
+
+  /** Calcula efectivo disponible en caja para un turno */
+  const computeEfectivoDisponible = (state: DatosGimnasio, turno: Turno) => {
+    const from = new Date(turno.fechaInicio).getTime();
+    const to = turno.fechaFin ? new Date(turno.fechaFin).getTime() : Date.now();
+
+    const ingresosEf = state.ingresos
+      .filter(i => i.formaPago === 'efectivo')
+      .filter(i => {
+        const t = new Date(i.fecha).getTime();
+        return t >= from && t <= to;
+      })
+      .reduce((acc, i) => acc + (i.monto || 0), 0);
+
+    const retirosTotal = state.retiros
+      .filter(r => {
+        const t = new Date(r.fecha).getTime();
+        return t >= from && t <= to;
+      })
+      .reduce((acc, r) => acc + (r.monto || 0), 0);
+
+    const gastosTotal = state.gastos
+      .filter(g => {
+        const t = new Date(g.fecha).getTime();
+        return t >= from && t <= to;
+      })
+      .reduce((acc, g) => acc + (g.monto || 0), 0);
+
+    const efectivo = (turno.montoInicial || 0) + ingresosEf - retirosTotal - gastosTotal;
+    return { ingresosEf, retirosTotal, gastosTotal, efectivoDisponible: Math.max(0, Number(efectivo.toFixed(2))) };
+  };
+
+  /** Alta de socio: crea socio + ingreso; suma métrica en turno abierto */
+  const addSocio = (socioData: Omit<Socio, 'id' | 'carnet' | 'estado'>) => {
+    const nuevoSocio: Socio = {
+      id: crypto.randomUUID(),
+      carnet: generarNumeroCarnet(data.contadores.carnet),
+      estado: calcularEstadoSocio(socioData.fechaInicio),
+      ...socioData,
+    };
+
+    const ingresoAlta: Ingreso = {
+      id: crypto.randomUUID(),
+      carnet: nuevoSocio.carnet,
+      nombreSocio: nuevoSocio.nombreCompleto,
+      monto: socioData.monto,
+      formaPago: socioData.formaPago,
+      fecha: nowISO(),
+      concepto: 'alta',
+    };
+
+    setData(prev => {
+      const turnos = [...prev.turnos];
+      const idx = getOpenTurnoIndex(turnos);
+      if (idx !== -1) {
+        const t = { ...turnos[idx] };
+        t.metrics = t.metrics || { altasCarnet: 0, renovaciones: 0 };
+        t.metrics.altasCarnet += 1;
+        turnos[idx] = t;
+      }
+      return {
+        ...prev,
+        socios: [...prev.socios, nuevoSocio],
+        ingresos: [...prev.ingresos, ingresoAlta],
+        contadores: { ...prev.contadores, carnet: prev.contadores.carnet + 1 },
+        turnos,
+      };
+    });
+  };
+
+  /** Registrar ingreso manual (no altera métricas) */
+  const addIngreso = (ingresoData: Omit<Ingreso, 'id'>) => {
+    const nuevoIngreso: Ingreso = { id: crypto.randomUUID(), ...ingresoData };
+    setData(prev => ({ ...prev, ingresos: [...prev.ingresos, nuevoIngreso] }));
+  };
+
+  const addRetiro = (retiroData: Omit<Retiro, 'id' | 'numero'>) => {
+    const nuevoRetiro: Retiro = {
+      id: crypto.randomUUID(),
+      numero: generarNumeroRetiro(data.contadores.retiro),
+      ...retiroData,
+    };
+    setData(prev => ({
+      ...prev,
+      retiros: [...prev.retiros, nuevoRetiro],
+      contadores: { ...prev.contadores, retiro: prev.contadores.retiro + 1 },
+    }));
+  };
+
+  const addGasto = (gastoData: Omit<Gasto, 'id'>) => {
+    const nuevoGasto: Gasto = { id: crypto.randomUUID(), ...gastoData };
+    setData(prev => ({ ...prev, gastos: [...prev.gastos, nuevoGasto] }));
+  };
+
+  /** Iniciar turno: con métricas en 0 */
+  const iniciarTurno = (usuario: string, montoInicial: number) => {
+    const nuevoTurno: Turno = {
+      id: crypto.randomUUID(),
+      usuario,
+      fechaInicio: nowISO(),
+      montoInicial,
+      cerrado: false,
+      metrics: { altasCarnet: 0, renovaciones: 0 },
+    };
+    setData(prev => ({ ...prev, turnos: [...prev.turnos, nuevoTurno] }));
+  };
+
+  /** Renovar membresía: mueve fechaInicio a hoy + ingreso; suma métrica turno */
+  const renovarMembresia = (socioId: string, formaPago: 'efectivo' | 'transferencia' = 'efectivo', monto: number = 30000) => {
+    setData(prev => {
+      const socios = prev.socios.map(s => {
+        if (s.id !== socioId) return s;
+        const nuevaFecha = new Date().toISOString().slice(0, 10);
+        return { ...s, fechaInicio: nuevaFecha, estado: 'vigente' as const };
+      });
+
+      const socio = prev.socios.find(s => s.id === socioId);
+      const ingresos = [...prev.ingresos];
+      if (socio) {
+        ingresos.push({
+          id: crypto.randomUUID(),
+          carnet: socio.carnet,
+          nombreSocio: socio.nombreCompleto,
+          monto,
+          formaPago,
+          fecha: nowISO(),
+          concepto: 'renovacion',
+        });
+      }
+
+      const turnos = [...prev.turnos];
+      const idx = getOpenTurnoIndex(turnos);
+      if (idx !== -1) {
+        const t = { ...turnos[idx] };
+        t.metrics = t.metrics || { altasCarnet: 0, renovaciones: 0 };
+        t.metrics.renovaciones += 1;
+        turnos[idx] = t;
+      }
+
+      return { ...prev, socios, ingresos, turnos };
+    });
+  };
+
+  /** Cerrar turno: valida que el montoFinal no exceda el efectivo disponible */
+  const cerrarTurno = (montoFinal: number) => {
+    setData(prev => {
+      const idx = getOpenTurnoIndex(prev.turnos);
+      if (idx === -1) return prev;
+
+      const turno = prev.turnos[idx];
+      const { efectivoDisponible } = computeEfectivoDisponible(prev, turno);
+
+      const final = Number(montoFinal || 0);
+      if (final > efectivoDisponible + 0.0001) {
+        alert(`El monto final ($${final.toFixed(2)}) no puede exceder el efectivo disponible en caja ($${efectivoDisponible.toFixed(2)}).`);
+        return prev; // no cierra
+      }
+
+      const cerrado: Turno = {
+        ...turno,
+        fechaFin: nowISO(),
+        montoFinal: final,
+        recaudacion: Number((final - (turno.montoInicial || 0)).toFixed(2)),
+        cerrado: true,
+        metrics: turno.metrics || { altasCarnet: 0, renovaciones: 0 },
+      };
+
+      const turnos = [...prev.turnos];
+      turnos[idx] = cerrado;
+      return { ...prev, turnos };
+    });
+  };
+
+  /** Actualizar socio existente */
+  const updateSocio = (socioId: string, updates: Partial<Omit<Socio, 'id' | 'carnet'>>) => {
+    setData(prev => ({
+      ...prev,
+      socios: prev.socios.map(s => s.id === socioId ? { ...s, ...updates } : s)
+    }));
+  };
+
+  /** Eliminar socio */
+  const deleteSocio = (socioId: string) => {
+    setData(prev => ({
+      ...prev,
+      socios: prev.socios.filter(s => s.id !== socioId)
+    }));
+  };
+
+  return {
+    data,
+    isLoading,
+    addSocio,
+    addIngreso,
+    addRetiro,
+    addGasto,
+    iniciarTurno,
+    cerrarTurno,
+    renovarMembresia,
+    updateSocio,
+    deleteSocio,
+  };
+};
+
+================================================================================
+src/types/index.ts
+================================================================================
+export interface Socio {
+  id: string;
+  carnet: string;
+  nombreCompleto: string;
+  dni: string;
+  fechaInicio: string;
+  formaPago: 'efectivo' | 'transferencia';
+  monto: number;
+  estado: 'vigente' | 'vencido';
+  // (opcional) teléfono: si más adelante lo querés usar
+  telefono?: string;
+}
+
+export interface Retiro {
+  id: string;
+  numero: string;
+  monto: number;
+  fecha: string;
+  descripcion?: string;
+}
+
+export interface Gasto {
+  id: string;
+  monto: number;
+  proveedor: string;
+  motivo: string;
+  remito: string;
+  fecha: string;
+}
+
+export interface Ingreso {
+  id: string;
+  carnet: string;
+  nombreSocio: string;
+  monto: number;
+  formaPago: 'efectivo' | 'transferencia';
+  fecha: string;
+
+  /** opcional: para clasificar movimientos */
+  concepto?: 'alta' | 'renovacion' | 'otro';
+}
+
+export interface Turno {
+  id: string;
+  usuario: string;
+  fechaInicio: string;
+  fechaFin?: string;
+  montoInicial: number;
+  montoFinal?: number;
+  recaudacion?: number;
+  cerrado: boolean;
+
+  /** métricas agregadas del turno (altas/renovaciones) */
+  metrics?: {
+    altasCarnet: number;
+    renovaciones: number;
+  };
+}
+
+export interface DatosGimnasio {
+  socios: Socio[];
+  retiros: Retiro[];
+  gastos: Gasto[];
+  ingresos: Ingreso[];
+  turnos: Turno[];
+  contadores: {
+    carnet: number;
+    retiro: number;
+  };
+}
+
+================================================================================
+src/types/global.d.ts
+================================================================================
+export {};
+
+declare global {
+  interface Window {
+    electronAPI: {
+      loadGymData: () => Promise<any>;
+      saveGymData: (data: any) => Promise<boolean>;
+      getDataPath: () => Promise<string>;
+    };
+  }
+}
+
+================================================================================
+src/utils/localStorage.ts
+================================================================================
+// src/utils/localStorage.ts
+import { DatosGimnasio, Socio } from '../types';
+
+/* ========= Tipos ========= */
+type AsistenciaRecord = {
+  id: string;
+  socioId: string;
+  carnet: string;
+  nombreCompleto: string;
+  timestampISO: string;
+  byUsuario?: string;
+  turnoId?: string;
+};
+
+/* ========= Ambiente ========= */
+declare global {
+  interface Window {
+    electronAPI?: {
+      loadGymData: () => Promise<any>;
+      saveGymData: (data: any) => Promise<boolean>;
+      getDataPath: () => Promise<string>;
+      exportBackup?: (data: any) => Promise<{ ok: boolean; filePath?: string; canceled?: boolean; error?: string }>;
+      importBackup?: () => Promise<{ ok: boolean; data?: any; source?: string; canceled?: boolean; error?: string }>;
+      pickBackupFolder?: () => Promise<{ ok: boolean; folder?: string; canceled?: boolean }>;
+      configureAutoBackup?: (opts: any) => Promise<{ ok: boolean }>;
+    };
+  }
+  interface FileSystemDirectoryHandle {
+    name: string;
+    requestPermission(descriptor?: { mode: 'read' | 'readwrite' }): Promise<'granted' | 'denied' | 'prompt'>;
+    queryPermission(descriptor?: { mode: 'read' | 'readwrite' }): Promise<'granted' | 'denied' | 'prompt'>;
+    getFileHandle(name: string, options?: { create?: boolean }): Promise<FileSystemFileHandle>;
+    getDirectoryHandle(name: string, options?: { create?: boolean }): Promise<FileSystemDirectoryHandle>;
+  }
+  interface FileSystemFileHandle { createWritable(): Promise<any>; }
+}
+
+const isElectron = () => typeof window !== 'undefined' && !!window.electronAPI;
+const isWebFSAccessSupported = () => typeof window !== 'undefined' && typeof (window as any).showDirectoryPicker === 'function' && 'indexedDB' in window;
+
+/* ========= Claves ========= */
+const DATA_KEY = 'apolo-gym-data';
+const ASIS_KEY_V1 = 'apolo-asistencias';      // legacy
+const ASIS_KEY_V2 = 'apolo-asistencias-v2';   // actual
+
+/* ========= Defaults ========= */
+const defaultData: DatosGimnasio = {
+  socios: [],
+  retiros: [],
+  gastos: [],
+  ingresos: [],
+  turnos: [],
+  contadores: { carnet: 1, retiro: 1 },
+};
+
+/* ========= Utilidades ========= */
+const downloadBlob = (blob: Blob, filename: string) => {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+};
+
+/* ========= IndexedDB (web folder handle) ========= */
+const IDB_DB = 'apolo-fs';
+const IDB_STORE = 'handles';
+const KEY_WEB_BACKUP_DIR = 'webBackupDir';
+
+function idbOpen(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(IDB_DB, 1);
+    req.onupgradeneeded = () => { const db = req.result; if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE); };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+function idbSet<T>(k: string, v: T): Promise<void> {
+  return idbOpen().then(db => new Promise<void>((res, rej) => {
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).put(v as any, k);
+    tx.oncomplete = () => res();
+    tx.onerror = () => rej(tx.error);
+  }));
+}
+function idbGet<T>(k: string): Promise<T | undefined> {
+  return idbOpen().then(db => new Promise<T | undefined>((res, rej) => {
+    const tx = db.transaction(IDB_STORE, 'readonly');
+    const rq = tx.objectStore(IDB_STORE).get(k);
+    rq.onsuccess = () => res(rq.result as T | undefined);
+    rq.onerror = () => rej(rq.error);
+  }));
+}
+
+async function pickWebBackupFolder(): Promise<string | null> {
+  if (!isWebFSAccessSupported()) return null;
+  try {
+    // @ts-ignore
+    const handle: FileSystemDirectoryHandle = await (window as any).showDirectoryPicker({ id: 'apolo-backups', mode: 'readwrite', startIn: 'documents' });
+    const perm = await handle.requestPermission?.({ mode: 'readwrite' });
+    if (perm !== 'granted') return null;
+    await idbSet(KEY_WEB_BACKUP_DIR, handle);
+    return handle.name || 'carpeta';
+  } catch { return null; }
+}
+async function getSavedWebBackupDirHandle(): Promise<FileSystemDirectoryHandle | null> {
+  if (!isWebFSAccessSupported()) return null;
+  try {
+    const h = (await idbGet<FileSystemDirectoryHandle>(KEY_WEB_BACKUP_DIR)) || null;
+    if (!h) return null;
+    const p = await h.queryPermission?.({ mode: 'readwrite' });
+    if (p === 'granted') return h;
+    if (p === 'prompt') return (await h.requestPermission?.({ mode: 'readwrite' })) === 'granted' ? h : null;
+    return null;
+  } catch { return null; }
+}
+async function writeBlobToWebFolder(filename: string, blob: Blob): Promise<boolean> {
+  const dir = await getSavedWebBackupDirHandle();
+  if (!dir) return false;
+  try {
+    const fh = await dir.getFileHandle(filename, { create: true });
+    // @ts-ignore
+    const w = await (fh as any).createWritable();
+    await w.write(blob); await w.close();
+    return true;
+  } catch { return false; }
+}
+
+/* ========= Asistencias RAW (con migración defensiva) ========= */
+function parseMaybeArray(json: string | null): AsistenciaRecord[] {
+  if (!json) return [];
+  try {
+    const p = JSON.parse(json);
+    if (Array.isArray(p)) return p;
+    if (p && typeof p === 'object' && 'id' in p) return [p as AsistenciaRecord];
+    return [];
+  } catch { return []; }
+}
+
+function loadAsistenciasRaw(): AsistenciaRecord[] {
+  const v2 = parseMaybeArray(localStorage.getItem(ASIS_KEY_V2));
+  if (v2.length) return v2;
+
+  // migrar desde legacy una sola vez
+  const legacy = parseMaybeArray(localStorage.getItem(ASIS_KEY_V1));
+  if (legacy.length) {
+    try { localStorage.setItem(ASIS_KEY_V2, JSON.stringify(legacy)); } catch {}
+    return legacy;
+  }
+  return [];
+}
+function saveAsistenciasRaw(list: AsistenciaRecord[]) {
+  localStorage.setItem(ASIS_KEY_V2, JSON.stringify(list));
+}
+
+/* ========= Carga / Guardado de datos ========= */
+export const loadData = async (): Promise<DatosGimnasio> => {
+  try {
+    if (isElectron()) {
+      const data = await window.electronAPI!.loadGymData();
+      if (data) {
+        // En escritorio, el archivo es "source of truth": traigo _asistencias al V2 SIEMPRE
+        if (Array.isArray(data._asistencias)) saveAsistenciasRaw(data._asistencias);
+        if (data.socios) data.socios = data.socios.map((s: Socio) => ({ ...s, estado: calcularEstadoSocio(s.fechaInicio) }));
+        const { _asistencias, ...base } = data || {};
+        return { ...defaultData, ...base };
+      }
+      return defaultData;
+    } else {
+      const raw = localStorage.getItem(DATA_KEY);
+      if (!raw) return defaultData;
+      const parsed = JSON.parse(raw);
+
+      // En web: **solo migro** _asistencias del JSON principal si V2 está VACÍO.
+      const v2Now = parseMaybeArray(localStorage.getItem(ASIS_KEY_V2));
+      if (v2Now.length === 0 && Array.isArray(parsed?._asistencias)) {
+        saveAsistenciasRaw(parsed._asistencias);
+      }
+
+      if (parsed.socios) {
+        parsed.socios = parsed.socios.map((s: Socio) => ({ ...s, estado: calcularEstadoSocio(s.fechaInicio) }));
+      }
+      const { _asistencias, ...base } = parsed || {};
+      return { ...defaultData, ...base };
+    }
+  } catch { return defaultData; }
+};
+
+export const saveData = async (data: DatosGimnasio): Promise<void> => {
+  try {
+    if (isElectron()) {
+      // Escritorio: guardo TODO (incluye asistencias V2 embebidas para persistir en disco)
+      const payload = { ...data, _asistencias: loadAsistenciasRaw() };
+      await window.electronAPI!.saveGymData(payload);
+    } else {
+      // Web: **NO** guardo _asistencias dentro del JSON principal para evitar que otro código lo pise.
+      localStorage.setItem(DATA_KEY, JSON.stringify({ ...data }));
+    }
+  } catch (e) { console.error('Error saving data:', e); }
+};
+
+export const getDataPath = async (): Promise<string | null> => {
+  if (!isElectron()) return null;
+  try { return await window.electronAPI!.getDataPath(); } catch { return null; }
+};
+
+/* ========= Reglas de negocio ========= */
+export const calcularEstadoSocio = (fechaInicio: string): 'vigente' | 'vencido' => {
+  const inicio = new Date(fechaInicio); const ahora = new Date();
+  return (ahora.getTime() - inicio.getTime()) > 30 * 24 * 60 * 60 * 1000 ? 'vencido' : 'vigente';
+};
+export const generarNumeroCarnet = (contador: number): string => {
+  const año = new Date().getFullYear().toString().slice(-2);
+  return `${año}-${contador.toString().padStart(3, '0')}`;
+};
+export const generarNumeroRetiro = (contador: number): string => contador.toString().padStart(3, '0');
+
+/* ========= Asistencias (alto nivel) ========= */
+export function getAsistencias(): AsistenciaRecord[] {
+  const list = loadAsistenciasRaw();
+  return list.sort((a, b) => new Date(b.timestampISO).getTime() - new Date(a.timestampISO).getTime());
+}
+
+export async function addAsistenciaByCarnetOrNombre(input: string): Promise<AsistenciaRecord | null> {
+  const q = input.trim().toLowerCase();
+  if (!q) return null;
+
+  const data = await loadData();
+  const normDNI = (dni: string) => (dni || '').replace(/\D+/g, '');
+  const qDigits = normDNI(q);
+
+  const byCarnetExact = data.socios.find(s => (s.carnet || '').toLowerCase() === q);
+  if (byCarnetExact) return persistAsistencia(byCarnetExact, data);
+
+  if (qDigits) {
+    const byDniExact = data.socios.find(s => normDNI(s.dni || '') === qDigits);
+    if (byDniExact) return persistAsistencia(byDniExact, data);
+  }
+
+  const candidate = data.socios.find(s => {
+    const nombre = (s.nombreCompleto || '').toLowerCase();
+    const carnet = (s.carnet || '').toLowerCase();
+    const dniDigits = normDNI(s.dni || '');
+    return (qDigits && dniDigits.includes(qDigits)) || nombre.includes(q) || carnet.includes(q);
+  });
+
+  if (!candidate) return null;
+  return persistAsistencia(candidate, data);
+}
+
+function persistAsistencia(socio: Socio, data: DatosGimnasio): AsistenciaRecord {
+  const turnoAbierto = (data.turnos || []).find(t => !t.cerrado);
+  const rec: AsistenciaRecord = {
+    id: (crypto as any).randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    socioId: socio.id,
+    carnet: socio.carnet,
+    nombreCompleto: socio.nombreCompleto,
+    timestampISO: new Date().toISOString(),
+    byUsuario: turnoAbierto?.usuario,
+    turnoId: turnoAbierto?.id,
+  };
+  const list = loadAsistenciasRaw();
+  list.push(rec);               // APENDEAR
+  saveAsistenciasRaw(list);     // SOLO V2
+  return rec;
+}
+
+export function getAsistenciasReport(fromISO: string, toISO: string): {
+  total: number;
+  porSocio: Array<{ socioId: string; carnet: string; nombreCompleto: string; asistencias: number }>;
+} {
+  const from = new Date(fromISO).getTime();
+  const to = new Date(toISO).getTime();
+  const list = loadAsistenciasRaw().filter(a => {
+    const t = new Date(a.timestampISO).getTime();
+    return t >= from && t <= to;
+  });
+  const map = new Map<string, { socioId: string; carnet: string; nombreCompleto: string; asistencias: number }>();
+  for (const a of list) {
+    const key = a.socioId || a.carnet;
+    const prev = map.get(key) || { socioId: a.socioId, carnet: a.carnet, nombreCompleto: a.nombreCompleto, asistencias: 0 };
+    prev.asistencias += 1; map.set(key, prev);
+  }
+  return { total: list.length, porSocio: Array.from(map.values()) };
+}
+
+/* ========= Exportar / Importar asistencias ========= */
+export function exportAsistenciasJSONFile(fromISO: string, toISO: string): void {
+  const from = new Date(fromISO).getTime();
+  const to = new Date(toISO).getTime();
+  const list = loadAsistenciasRaw().filter(a => {
+    const t = new Date(a.timestampISO).getTime();
+    return t >= from && t <= to;
+  });
+  const payload = { exportado: new Date().toISOString(), rango: { from: fromISO, to: toISO }, total: list.length, asistencias: list };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+  downloadBlob(blob, `apolo-asistencias-${fromISO.slice(0,10)}_a_${toISO.slice(0,10)}.json`);
+}
+
+export function exportAsistenciasCSVFile(fromISO: string, toISO: string): void {
+  const from = new Date(fromISO).getTime();
+  const to = new Date(toISO).getTime();
+  const list = loadAsistenciasRaw().filter(a => {
+    const t = new Date(a.timestampISO).getTime();
+    return t >= from && t <= to;
+  });
+  const headers = ['FechaHora','Carnet','Nombre','Operador','TurnoId'];
+  const rows = list.map(a => {
+    const nombre = `"${(a.nombreCompleto || '').replace(/"/g,'""')}"`;
+    return [a.timestampISO, a.carnet, nombre, a.byUsuario || '', a.turnoId || ''].join(',');
+  });
+  const blob = new Blob(['\uFEFF' + [headers.join(','), ...rows].join('\n')], { type: 'text/csv;charset=utf-8' });
+  downloadBlob(blob, `apolo-asistencias-${fromISO.slice(0,10)}_a_${toISO.slice(0,10)}.csv`);
+}
+
+export async function importAsistenciasFromFile(file: File): Promise<{ imported: number; skipped: number }> {
+  const text = await file.text();
+  const payload = JSON.parse(text);
+  const list: AsistenciaRecord[] = Array.isArray(payload) ? payload
+    : Array.isArray(payload?.asistencias) ? payload.asistencias : [];
+  if (!Array.isArray(list)) throw new Error('Formato inválido');
+
+  const current = loadAsistenciasRaw();
+  const existing = new Set(current.map(a => a.id));
+  let imported = 0;
+  for (const a of list) {
+    if (!a?.id || existing.has(a.id)) continue;
+    current.push(a); imported++;
+  }
+  current.sort((a,b) => new Date(b.timestampISO).getTime() - new Date(a.timestampISO).getTime());
+  saveAsistenciasRaw(current);
+  return { imported, skipped: list.length - imported };
+}
+
+/* ========= Sugerencias ========= */
+export async function buscarSugerenciasSocios(q: string, limit = 8): Promise<Array<Pick<Socio,'id'|'carnet'|'nombreCompleto'|'dni'>>> {
+  const query = q.trim().toLowerCase();
+  if (!query) return [];
+  const data = await loadData();
+  const normDNI = (dni: string) => (dni || '').replace(/\D+/g, '');
+  const qDigits = normDNI(query);
+
+  return (data.socios || [])
+    .filter(s => {
+      const carnet = (s.carnet || '').toLowerCase();
+      const nombre = (s.nombreCompleto || '').toLowerCase();
+      const dni = normDNI(s.dni || '');
+      return carnet.includes(query) || nombre.includes(query) || (!!qDigits && dni.includes(qDigits));
+    })
+    .sort((a,b) => b.carnet.localeCompare(a.carnet))
+    .slice(0, limit)
+    .map(s => ({ id: s.id, carnet: s.carnet, nombreCompleto: s.nombreCompleto, dni: s.dni }));
+}
+
+/* ========= Carnets ========= */
+export async function exportCarnetsJSONFile(): Promise<void> {
+  const all = await loadData();
+  const socios = (all?.socios ?? []).map(s => ({
+    id: s.id, carnet: s.carnet, nombreCompleto: s.nombreCompleto, dni: s.dni,
+    fechaInicio: s.fechaInicio, formaPago: s.formaPago, monto: s.monto, estado: s.estado,
+  }));
+  const blob = new Blob([JSON.stringify({ exportado: new Date().toISOString(), total: socios.length, socios }, null, 2)], { type: 'application/json;charset=utf-8' });
+  downloadBlob(blob, `apolo-carnets-${new Date().toISOString().slice(0,10)}.json`);
+}
+export async function exportCarnetsCSVFile(): Promise<void> {
+  const all = await loadData();
+  const socios = all?.socios ?? [];
+  const headers = ['Carnet','NombreCompleto','DNI','FechaInicio','FormaPago','Monto','Estado'];
+  const rows = socios.map(s => {
+    const nombre = `"${(s.nombreCompleto || '').replace(/"/g,'""')}"`;
+    const dni = (s.dni || '').replace(/"/g,'""');
+    const fecha = s.fechaInicio || ''; const forma = s.formaPago || '';
+    const monto = (s.monto ?? 0).toString(); const estado = s.estado || '';
+    return [s.carnet, nombre, dni, fecha, forma, monto, estado].join(',');
+  });
+  const blob = new Blob(['\uFEFF' + [headers.join(','), ...rows].join('\n')], { type: 'text/csv;charset=utf-8' });
+  downloadBlob(blob, `apolo-carnets-${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+/* ========= Backups ========= */
+export async function exportBackupManual(): Promise<{ ok: boolean; filePath?: string; canceled?: boolean; error?: string }> {
+  const all = await loadData();
+  const asistencias = loadAsistenciasRaw();
+  const merged = { ...all, _asistencias: asistencias };
+
+  if (isElectron() && window.electronAPI?.exportBackup) {
+    try { return await window.electronAPI.exportBackup(merged); }
+    catch (e: any) { return { ok: false, error: e?.message || 'Error exportando backup' }; }
+  }
+
+  const payload = { version: 'apolo.backup.v1', exportedAt: new Date().toISOString(), data: merged };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+  const fname = `apolo-backup-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.json`;
+  if (isWebFSAccessSupported() && (await writeBlobToWebFolder(fname, blob))) return { ok: true, filePath: fname };
+  downloadBlob(blob, fname); return { ok: true };
+}
+
+export async function importBackupManual(): Promise<{ ok: boolean; imported?: number; error?: string }> {
+  if (isElectron() && window.electronAPI?.importBackup) {
+    try {
+      const res = await window.electronAPI.importBackup();
+      if (!res?.ok || !res.data) return { ok: false, error: res?.error || 'Sin datos' };
+      const { _asistencias, ...base } = res.data || {};
+      await saveData(base);                 // en web no guarda asistencias dentro
+      if (Array.isArray(_asistencias)) saveAsistenciasRaw(_asistencias);
+      return { ok: true };
+    } catch (e: any) { return { ok: false, error: e?.message || 'Error importando backup' }; }
+  }
+
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = 'application/json';
+    input.onchange = async () => {
+      const file = input.files?.[0]; if (!file) return resolve({ ok: false, error: 'cancelado' });
+      try {
+        const text = await file.text();
+        const payload = JSON.parse(text);
+        const data = payload?.data ?? payload;
+        const { _asistencias, ...base } = data || {};
+        await saveData(base);
+        if (Array.isArray(_asistencias)) saveAsistenciasRaw(_asistencias);
+        resolve({ ok: true });
+      } catch (e: any) { resolve({ ok: false, error: e?.message || 'Error al importar' }); }
+    };
+    input.click();
+  });
+}
+
+export async function chooseBackupFolder(): Promise<string | null> {
+  if (isElectron() && window.electronAPI?.pickBackupFolder) {
+    const res = await window.electronAPI.pickBackupFolder();
+    return res?.ok ? res.folder! : null;
+  }
+  return await pickWebBackupFolder();
+}
+
+export async function getWebBackupFolderName(): Promise<string | null> {
+  const dir = await getSavedWebBackupDirHandle();
+  return dir?.name || null;
+}
+
+export async function configureAutoBackup(opts: {
+  enabled: boolean; folder: string; mode: 'interval' | 'time'; everyMs?: number; time?: string;
+}): Promise<boolean> {
+  if (isElectron() && window.electronAPI?.configureAutoBackup) {
+    const res = await window.electronAPI.configureAutoBackup(opts);
+    return !!res?.ok;
+  }
+  return true; // en web lo maneja la UI
+}
+
+================================================================================
+electron/main.js
+================================================================================
+// electron/main.js
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const path = require('path');
+const fs = require('fs');
+
+let mainWindow = null;
+
+// ==== CONFIG BÁSICA ====
+const APP_NAME = 'APOLO GYM';
+const DATA_FOLDER = path.join(app.getPath('documents'), 'apolo-gym');
+const DATA_FILE = path.join(DATA_FOLDER, 'apolo-gym-data.json');
+const SETTINGS_FILE = path.join(DATA_FOLDER, 'settings.json');
+
+function ensureDir(dir) {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+ensureDir(DATA_FOLDER);
+
+// ===== Settings =====
+function readSettings() {
+  try {
+    if (fs.existsSync(SETTINGS_FILE)) {
+      return JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
+    }
+  } catch {}
+  return {
+    autoBackup: {
+      enabled: false,
+      folder: '',
+      mode: 'interval', // 'interval' | 'time'
+      everyMs: 60 * 60 * 1000, // 1 hora
+      time: '23:59', // para mode 'time'
+    },
+  };
+}
+function writeSettings(s) {
+  ensureDir(DATA_FOLDER);
+  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(s, null, 2), 'utf8');
+}
+
+// ==== VENTANA ====
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+    title: APP_NAME,
+  });
+
+  if (process.env.VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
+  } else {
+    mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'index.html'));
+  }
+}
+
+app.whenReady().then(createWindow);
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
+
+// ==== DATOS PRINCIPALES ====
+ipcMain.handle('gym:load', async () => {
+  try {
+    if (!fs.existsSync(DATA_FILE)) {
+      ensureDir(DATA_FOLDER);
+      fs.writeFileSync(
+        DATA_FILE,
+        JSON.stringify({
+          socios: [], retiros: [], gastos: [], ingresos: [], turnos: [],
+          contadores: { carnet: 1, retiro: 1 },
+          _asistencias: [], // soporte: si renderer guarda esto lo mantenemos
+        }, null, 2),
+        'utf8'
+      );
+    }
+    const content = fs.readFileSync(DATA_FILE, 'utf8');
+    return JSON.parse(content);
+  } catch (e) {
+    console.error('Error load data', e);
+    return null;
+  }
+});
+
+ipcMain.handle('gym:save', async (_evt, data) => {
+  try {
+    ensureDir(DATA_FOLDER);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+    return true;
+  } catch (e) {
+    console.error('Error save data', e);
+    return false;
+  }
+});
+
+ipcMain.handle('gym:getDataPath', async () => DATA_FILE);
+
+// ==== BACKUP MANUAL (con diálogo) ====
+ipcMain.handle('backup:export', async (_evt, payloadData) => {
+  try {
+    const ts = new Date();
+    const stamp = ts.toISOString().replace(/[:.]/g, '-');
+    const defaultPath = path.join(app.getPath('documents'), `apolo-backup-${stamp}.json`);
+    const { canceled, filePath } = await dialog.showSaveDialog({
+      title: 'Exportar backup',
+      defaultPath,
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+    if (canceled || !filePath) return { ok: false, canceled: true };
+
+    const payload = {
+      version: 'apolo.backup.v1',
+      exportedAt: ts.toISOString(),
+      data: payloadData,
+    };
+    fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), 'utf8');
+    return { ok: true, filePath };
+  } catch (e) {
+    console.error('Export backup error', e);
+    return { ok: false, error: e.message };
+  }
+});
+
+// ==== IMPORTAR BACKUP (elige archivo) ====
+ipcMain.handle('backup:import', async () => {
+  try {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      title: 'Importar backup',
+      properties: ['openFile'],
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+    if (canceled || !filePaths?.[0]) return { ok: false, canceled: true };
+
+    const content = fs.readFileSync(filePaths[0], 'utf8');
+    const payload = JSON.parse(content);
+    const imported = payload?.data ?? payload;
+    return { ok: true, data: imported, source: filePaths[0] };
+  } catch (e) {
+    console.error('Import backup error', e);
+    return { ok: false, error: e.message };
+  }
+});
+
+// ==== ELEGIR CARPETA ====
+ipcMain.handle('backup:pickFolder', async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    title: 'Elegí carpeta de backups (ideal: tu Google Drive)',
+    properties: ['openDirectory', 'createDirectory']
+  });
+  if (canceled || !filePaths?.[0]) return { ok: false, canceled: true };
+  return { ok: true, folder: filePaths[0] };
+});
+
+// ==== AUTOBACKUP (intervalo o hora diaria) ====
+let intervalHandle = null;
+let dailyHandle = null;
+
+function clearSchedulers() {
+  if (intervalHandle) { clearInterval(intervalHandle); intervalHandle = null; }
+  if (dailyHandle) { clearTimeout(dailyHandle); dailyHandle = null; }
+}
+
+function writeBackupToFolder(targetFolder) {
+  try {
+    ensureDir(targetFolder);
+    if (!fs.existsSync(DATA_FILE)) return;
+    const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    const filePath = path.join(targetFolder, `apolo-autobackup-${ts}.json`);
+    const payload = { version: 'apolo.backup.v1', exportedAt: new Date().toISOString(), data };
+    fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), 'utf8');
+  } catch (e) {
+    console.error('Auto-backup write error', e);
+  }
+}
+
+function scheduleAutoBackup(settings) {
+  clearSchedulers();
+  const cfg = settings?.autoBackup || {};
+  if (!cfg.enabled || !cfg.folder) return;
+
+  ensureDir(cfg.folder);
+
+  if (cfg.mode === 'interval') {
+    let ms = Number(cfg.everyMs || 0);
+    if (!Number.isFinite(ms) || ms < 60_000) ms = 60_000; // mínimo 1 minuto
+    intervalHandle = setInterval(() => writeBackupToFolder(cfg.folder), ms);
+    // disparamos uno ahora para asegurar el primer backup
+    writeBackupToFolder(cfg.folder);
+  } else {
+    // mode 'time': ejecutar una vez al día a HH:MM
+    const when = cfg.time || '23:59';
+    const [HH, MM] = when.split(':').map(n => parseInt(n, 10));
+    const planNext = () => {
+      const now = new Date();
+      const next = new Date();
+      next.setHours(HH, MM, 0, 0);
+      if (next <= now) next.setTime(next.getTime() + 24 * 60 * 60 * 1000);
+      const delay = next.getTime() - now.getTime();
+      dailyHandle = setTimeout(() => {
+        writeBackupToFolder(cfg.folder);
+        planNext();
+      }, delay);
+    };
+    planNext();
+  }
+}
+
+ipcMain.handle('backup:configure', async (_evt, opts) => {
+  const settings = readSettings();
+  settings.autoBackup = {
+    enabled: Boolean(opts?.enabled),
+    folder: opts?.folder || '',
+    mode: opts?.mode === 'time' ? 'time' : 'interval',
+    everyMs: Number(opts?.everyMs || 0) || 60 * 60 * 1000,
+    time: opts?.time || '23:59',
+  };
+  writeSettings(settings);
+  scheduleAutoBackup(settings);
+  return { ok: true, settings: settings.autoBackup };
+});
+
+// Inicializa scheduler si había configuración previa
+scheduleAutoBackup(readSettings());
+
+================================================================================
+electron/preload.js
+================================================================================
+// electron/preload.js
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  // Datos base
+  loadGymData: () => ipcRenderer.invoke('gym:load'),
+  saveGymData: (data) => ipcRenderer.invoke('gym:save', data),
+  getDataPath: () => ipcRenderer.invoke('gym:getDataPath'),
+
+  // Backups
+  exportBackup: (data) => ipcRenderer.invoke('backup:export', data),
+  importBackup: () => ipcRenderer.invoke('backup:import'),
+  pickBackupFolder: () => ipcRenderer.invoke('backup:pickFolder'),
+  configureAutoBackup: (opts) => ipcRenderer.invoke('backup:configure', opts),
+});
+
+================================================================================
+electron/assets/.gitkeep
+================================================================================
+# Carpeta para iconos de la aplicación
+# Agregar aquí icon.png e icon.ico para la aplicación
+
+================================================================================
+FIN DEL DOCUMENTO
+================================================================================
+
+Este archivo contiene toda la estructura y código completo del Sistema de Gestión APOLO GYM.
+El sistema incluye:
+
+- Control de asistencias con autocompletado
+- Gestión completa de socios con carnets digitales
+- Sistema de caja con control de turnos
+- Búsqueda avanzada de carnets
+- Sistema de backups automáticos
+- Soporte para web y aplicación de escritorio (Electron)
+
+Tecnologías utilizadas:
+- React 18 + TypeScript
+- Tailwind CSS para estilos
+- Lucide React para iconos
+- Vite como build tool
+- Electron para aplicación de escritorio
+
+El sistema está completamente funcional y listo para producción.
